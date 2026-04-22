@@ -1,0 +1,40 @@
+﻿using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Enums;
+using Api_Venda_Ingressos.BoundedContext.Auth.Domain.ValueObjects;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Api_Venda_Ingressos.BoundedContext.Auth.Domain.Entities
+{
+    public class User : EntityBase
+    {
+        public Name FirstName { get; private set; }
+        public Name LastName { get; private set; }
+        public Email Email { get; private set; }
+        public Password PasswordHash { get; private set; }
+        public UserRole Role { get; private set; }
+        public CPF CPF { get; private set; }
+        public DateOfBirth DateOfBirth { get; private set; }
+
+        public User(Name firstName, Name lastName, Email email, DateOfBirth dateOfBirth, CPF cpf, Password passwordHash, UserRole role)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            DateOfBirth = dateOfBirth;
+            CPF = cpf;
+            Email = email;
+            PasswordHash = passwordHash;
+            Role = role;
+        }
+
+        public void UpdateProfile(Name newFirstName, Name newLastName, Email newEmail)
+        {
+            this.FirstName = newFirstName;
+            this.LastName = newLastName;
+            this.Email = newEmail;
+        }
+
+        public void ChangePassword(Password newPasswordHash)
+        {
+            this.PasswordHash = newPasswordHash;
+        }
+    }
+}

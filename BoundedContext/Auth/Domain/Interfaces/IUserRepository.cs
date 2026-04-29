@@ -4,11 +4,11 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Domain.Interfaces
 {
     public interface IUserRepository
     {
-        User GetById(Guid id);
-        User GetByEmail(string email);
-        IEnumerable<User> GetAll();
-        void Save(User user);     
-        void Update(User user);    
-        void Delete(User user);
+        Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default);
+        Task<User?> GetByEmailAsync(string email, CancellationToken ct = default);
+        Task<IEnumerable<User>> GetAllAsync(CancellationToken ct = default);
+        Task SaveAsync(User user, CancellationToken ct = default);
+        Task UpdateAsync(User user, CancellationToken ct = default);
+        Task DeleteAsync(User user, CancellationToken ct = default);
     }
 }

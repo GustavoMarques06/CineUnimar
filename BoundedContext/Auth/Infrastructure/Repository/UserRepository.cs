@@ -1,6 +1,7 @@
 ﻿using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Entities;
 using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository
 {
@@ -13,37 +14,37 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository
             _context = context;
         }
 
-        public User GetById(Guid id)
+        public async Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default)
         {
-            return _context.Users.FirstOrDefault(u => u.Id == id);
+           return await _context.Users.FirstOrDefaultAsync(u => u.Id == id, ct);
         }
 
-        public User GetByEmail(string email)
+        public async Task<User?> GetByEmailAsync(string email, CancellationToken ct = default)
         {
-            return _context.Users.FirstOrDefault(u => u.Email.Value == email);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email.Value == email, ct);
         }
 
-        public void Save(User user)
+        public async Task<IEnumerable<User>> GetAllAsync(CancellationToken ct = default)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges(); 
+            return await _context.Users.ToListAsync(ct);
+        }    
+
+        public async Task SaveAsync(User user, CancellationToken ct = default)
+        {
+            await _context.Users.AddAsync(user, ct);
+            await _context.SaveChangesAsync(ct);
         }
 
-        public void Update(User user)
+        public async Task UpdateAsync(User user, CancellationToken ct = default)
         {
             _context.Users.Update(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync(ct);
         }
 
-        public void Delete(User user)
+        public async Task DeleteAsync(User user, CancellationToken ct = default)
         {
             _context.Users.Remove(user);
-            _context.SaveChanges();
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            return _context.Users.ToList();
+            await _context.SaveChangesAsync(ct);
         }
     }
 }

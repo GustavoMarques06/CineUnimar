@@ -12,7 +12,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities
 
         public Quantity Quantity_bought {get; private set; }
 
-        public Quantity Quantity_avaliable {get; private set; }
+        public Quantity Quantity_available { get; private set; }
 
         public Ticket(Price price, Location location, Date data, Quantity quantity_bought, Quantity quantity_avaliable)
         {
@@ -27,14 +27,18 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities
         {
             this.Price = price;
             this.Location = location;
-            this.Data = data;
+            this.Date = data;
             this.Quantity_bought = quantity_bought;
             this.Quantity_avaliable = quantity_avaliable;
         }
-        
-        public void Sell(Quantity quantity_bought, Quantity quantity_avaliable)
+
+        public void Sell(Quantity quantity)
         {
-            
+            if (Quantity_available.Value < quantity)
+                throw new Exception("Ingressos insuficientes");
+
+            Quantity_bought = new Quantity(Quantity_bought.Value + quantity);
+            Quantity_available = new Quantity(Quantity_available.Value - quantity);
         }
     }
 }

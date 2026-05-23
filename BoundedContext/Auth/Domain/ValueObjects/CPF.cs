@@ -1,7 +1,6 @@
 ﻿public class CPF
 {
     public string Value { get; }
-
     public CPF(string valor)
     {
         if (string.IsNullOrWhiteSpace(valor))
@@ -22,18 +21,20 @@
 
     private static bool Validar(string cpf)
     {
-        if (cpf.Length != 11) 
+        if (cpf.Length != 11)
             return false;
 
-        if (cpf.Distinct().Count() == 1) 
+        if (cpf.Distinct().Count() == 1)
             return false;
 
         return true;
     }
+
     public string Formatar()
     {
         return $"{Value.Substring(0, 3)}.{Value.Substring(3, 3)}.{Value.Substring(6, 3)}-{Value.Substring(9, 2)}";
     }
+
     public override bool Equals(object? obj)
     {
         if (obj is not CPF outro) return false;
@@ -46,5 +47,4 @@
     }
 
     public override string ToString() => Value;
-
 }

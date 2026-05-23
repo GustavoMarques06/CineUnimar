@@ -17,16 +17,17 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.UseCases
             _hasher = hasher;
         }
 
-        public async Task RunAsync(RegisterUserRequestDTO dto, CancellationToken ct = default)
+        public async Task RunAsync(RegisterUserRequestDTO dto)
         {
             var email = new Email(dto.Email);
             var cpf = new CPF(dto.CPF);
             var dateOfBirth = DateOfBirth.Create(dto.DateOfBirth.ToDateTime(TimeOnly.MinValue));
 
-            var existingUser = await _userRepository.GetByEmailAsync(email.Value, ct);
+            var existingUser = await _userRepository.GetByEmailAsync(email.Value);
             if (existingUser is not null)
                 throw new Exception("Email já cadastrado no sistema.");
 
+            Password.ValidateRaw(dto.Password);
             var passwordHash = _hasher.Hash(dto.Password);
 
             var newUser = new User(
@@ -39,7 +40,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.UseCases
                 UserRole.User
             );
 
-            await _userRepository.SaveAsync(newUser, ct);
+            await _userRepository.SaveAsync(newUser);
         }
     }
 }

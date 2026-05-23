@@ -21,29 +21,25 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.UseCases
             _tokenService = tokenService;
         }
 
-        public async Task<LoginResponse> RunAsync(LoginRequest request, CancellationToken ct = default)
+        public async Task<LoginResponse> RunAsync(LoginRequest request)
         {
-            var user = await _userRepository.GetByEmailAsync(request.Email, ct);
-            if (user is not null)
-            {
-                bool isPasswordValid = _passwordHasher.Verify(request.Password, user.PasswordHash.Value);
+            var user = await _userRepository.GetByEmailAsync(request.Email);
 
-                if (isPasswordValid)
-                {
-                    var (token, expiresAt) = _tokenService.GenerateToken(user);
-
-                    return new LoginResponse(
-                        accessToken: token,
-                        expiresAt: expiresAt,
-                        userName: $"{user.FirstName.Value} {user.LastName.Value}",
-                        role: user.Role.ToString()
-                    );
-                }
-                else
-                    throw new UnauthorizedAccessException("Credenciais inválidas.");
-            }
-            else
+            if (user is null)
                 throw new UnauthorizedAccessException("Credenciais inválidas.");
+
+            bool senhaValida = _passwordHasher.Verify(request.Password, user.PasswordHash.Value);
+            if (!senhaValida)
+                throw new UnauthorizedAccessException("Credenciais inválidas."); ;
+
+            var (token, expiresAt) = _tokenService.GenerateToken(user);
+
+            return new LoginResponse(
+                accessToken: token,
+                expiresAt: expiresAt,
+                userName: $"{user.FirstName.Value} {user.LastName.Value}",
+                role: user.Role.ToString()
+            );
         }
     }
 }

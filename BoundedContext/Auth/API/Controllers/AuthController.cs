@@ -22,11 +22,11 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.API.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO dto, CancellationToken ct)
+        public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO dto)
         {
             try
             {
-                await _registerUserUseCase.RunAsync(dto, ct);
+                await _registerUserUseCase.RunAsync(dto);
                 return Created("", new { message = "Usuário cadastrado com sucesso!" });
             }
             catch (Exception ex)
@@ -37,11 +37,11 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous] // Mais pra frente iremos precisar de endpoints que necessitem de autenticação, esse AllowAnonymous diz q n é necessário autenticação para acessar esse endpoint
-        public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken ct)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             try
             {
-                var response = await _loginUserUseCase.RunAsync(request, ct);
+                var response = await _loginUserUseCase.RunAsync(request);
                 return Ok(response);
             }
             catch (Exception ex)

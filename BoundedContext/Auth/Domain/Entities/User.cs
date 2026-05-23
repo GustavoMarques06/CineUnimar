@@ -1,6 +1,5 @@
 ﻿using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Enums;
 using Api_Venda_Ingressos.BoundedContext.Auth.Domain.ValueObjects;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Api_Venda_Ingressos.BoundedContext.Auth.Domain.Entities
 {

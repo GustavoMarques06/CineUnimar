@@ -1,0 +1,15 @@
+using Api_Venda_Ingressos.BoundedContext.Event.Domain.ValueObjects;
+
+namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
+
+public class Theater
+{
+    public Name Name { get; private set; }
+    public string Location { get; private set; }
+
+    public Theater(Name name, string location)
+    {
+        Name = name;
+        Location = location;
+    }
+}

@@ -19,7 +19,7 @@ public class AppDbContext : DbContext
             builder.Property(u => u.Id).HasColumnName("id");
             builder.Property(u => u.Role).HasColumnName("role").HasConversion<string>().HasMaxLength(20).IsRequired();
             builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
-            builder.Property(u => u.RemovedAt).HasColumnNamprinte("removed_at");
+            builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
 
             builder.OwnsOne(u => u.Email, e => {
                 e.Property(p => p.Value).HasColumnName("email").HasMaxLength(256).IsRequired();

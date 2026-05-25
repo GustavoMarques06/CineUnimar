@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // 1. BANCO DE DADOS
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<AuthContext>(options =>
     options.UseNpgsql(connectionString));
 
 // 2. INJEÇÃO DE DEPENDÊNCIA

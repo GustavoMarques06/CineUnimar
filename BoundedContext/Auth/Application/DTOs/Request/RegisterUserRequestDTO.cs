@@ -1,6 +1,4 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Auth.Domain.ValueObjects;
-
-namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.DTOs.Request
+﻿namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.DTOs.Request
 {
     public class RegisterUserRequestDTO
     {

@@ -1,4 +1,5 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Auth.Application.DTOs.Response;
+﻿using Api_Venda_Ingressos.BoundedContext.Auth.Application.DTOs.Request;
+using Api_Venda_Ingressos.BoundedContext.Auth.Application.DTOs.Response;
 using Api_Venda_Ingressos.BoundedContext.Auth.Application.Services;
 using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Interfaces;
 
@@ -30,7 +31,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.UseCases
 
             bool senhaValida = _passwordHasher.Verify(request.Password, user.PasswordHash.Value);
             if (!senhaValida)
-                throw new UnauthorizedAccessException("Credenciais inválidas."); ;
+                throw new UnauthorizedAccessException("Credenciais inválidas.");
 
             var (token, expiresAt) = _tokenService.GenerateToken(user);
 

@@ -9,12 +9,12 @@ public class Event : EntityBase
     public Description? Description { get; private set; }
     public DateTime Date { get; private set; }
     public Duration Duration { get; private set; }
-    public int RoomId { get; private set; }
+    public Guid RoomId { get; private set; }
     public EventStatus Status { get; private set; }
-    public int CategoryId{ get; private set; }
-    public int UserCreatorId { get; private set; }
+    public Guid CategoryId{ get; private set; }
+    public Guid UserCreatorId { get; private set; }
 
-    public Event(Name name, Description? description, DateTime date, Duration duration, int roomId, EventStatus status, int categoryId, int userCreatorId)
+    public Event(Name name, Description? description, DateTime date, Duration duration, Guid roomId, EventStatus status, Guid categoryId, Guid userCreatorId)
     {
         Name = name;
         Description = description;

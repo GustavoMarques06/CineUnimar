@@ -1,4 +1,5 @@
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.ValueObjects;
+using Api_Venda_Ingressos.BoundedContext.Sell.Domain.ValueObjects;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 
@@ -11,5 +12,11 @@ public class Theater
     {
         Name = name;
         Location = location;
+    }
+
+    public void UpdateTheater(Name name, string location)
+    {
+        this.Name = name;
+        this.Location = location;
     }
 }

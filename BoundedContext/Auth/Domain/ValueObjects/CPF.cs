@@ -1,5 +1,6 @@
 ﻿public class CPF
 {
+    protected CPF() { }
     public string Value { get; }
     public CPF(string valor)
     {

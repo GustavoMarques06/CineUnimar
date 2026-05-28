@@ -10,6 +10,6 @@ public class Quantity
         {
             throw new Exception("A quantidade comprada não pode ser negativa");
         }
-
+        this.value = value;
     }
 }

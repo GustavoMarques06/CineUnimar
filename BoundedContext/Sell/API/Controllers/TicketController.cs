@@ -20,7 +20,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTicketRequest request)
         {
-            var ticket = await _service.CreateAsync(
+            var ticket = await _service.SaveAsync(
                 new Price(request.Price),
                 new Location(request.Location),
                 new Date(request.Date),
@@ -38,11 +38,11 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
             var response = tickets.Select(t => new TicketResponse
             {
                 Id = t.Id,
-                Price = t.Price.Value,
-                Location = t.Location.Value,
-                Date = t.Data.Value,
-                QuantityBought = t.Quantity_bought.Value,
-                QuantityAvailable = t.Quantity_available.Value
+                Price = t.Price.value,
+                Location = t.Location.value,
+                Date = t.Data.value,
+                QuantityBought = t.Quantity_bought.value,
+                QuantityAvailable = t.Quantity_available.value
             });
 
             return Ok(response);
@@ -59,11 +59,11 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
             var response = new TicketResponse
             {
                 Id = ticket.Id,
-                Price = ticket.Price.Value,
-                Location = ticket.Location.Value,
-                Date = ticket.Data.Value,
-                QuantityBought = ticket.Quantity_bought.Value,
-                QuantityAvailable = ticket.Quantity_available.Value
+                Price = ticket.Price.value,
+                Location = ticket.Location.value,
+                Date = ticket.Data.value,
+                QuantityBought = ticket.Quantity_bought.value,
+                QuantityAvailable = ticket.Quantity_available.value
             };
 
             return Ok(response);

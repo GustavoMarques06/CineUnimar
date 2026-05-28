@@ -2,6 +2,8 @@
 {
     public class DateOfBirth
     {
+        protected DateOfBirth() { }
+
         public DateOnly Value { get; private set; }
         private DateOfBirth(DateOnly value)
         {

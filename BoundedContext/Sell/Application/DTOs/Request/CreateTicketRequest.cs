@@ -2,7 +2,7 @@
 {
     public class CreateTicketRequest
     {
-        public decimal Price { get; set; }
+        public double Price { get; set; }
         public string Location { get; set; }
         public DateTime Date { get; set; }
         public int QuantityAvailable { get; set; }

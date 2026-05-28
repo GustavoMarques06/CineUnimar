@@ -2,6 +2,7 @@
 {
     public class Password
     {
+        protected Password() { }
         public string Value { get; private set; }
         public Password(string value)
         {

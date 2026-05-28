@@ -15,5 +15,7 @@ public class Date
         {
             throw new Exception("A data do evento não pode ser no futuro");
         }
+
+        this.value = value;
     }
 }

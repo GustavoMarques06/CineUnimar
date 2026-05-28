@@ -2,6 +2,7 @@
 {
     public class Name
     {
+        protected Name() { }
         public string Value { get; private set; }
         public Name(string value)
         {

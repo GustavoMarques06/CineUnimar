@@ -10,6 +10,8 @@ public class Price
         {
             throw new Exception("Preço deve ser maior que zero");
         }
-        
+
+        this.value = value;
+
     }
 }

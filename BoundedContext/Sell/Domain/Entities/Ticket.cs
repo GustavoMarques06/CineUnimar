@@ -8,37 +8,56 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities
 
         public Location Location { get; private set; }
 
-        public Date Data {get; private set; }
+        public Date Data { get; private set; }
 
-        public Quantity Quantity_bought {get; private set; }
+        public Quantity Quantity_bought { get; private set; }
 
         public Quantity Quantity_available { get; private set; }
 
-        public Ticket(Price price, Location location, Date data, Quantity quantity_bought, Quantity quantity_avaliable)
+        // Construtor vazio para o EF Core
+        private Ticket()
+        {
+        }
+
+        public Ticket(
+            Price price,
+            Location location,
+            Date data,
+            Quantity quantity_bought,
+            Quantity quantity_available)
         {
             Price = price;
             Location = location;
             Data = data;
             Quantity_bought = quantity_bought;
-            Quantity_avaliable = quantity_avaliable;
+            Quantity_available = quantity_available;
         }
 
-        public void UpdateTicket(Price price, Location location, Date data, Quantity quantity_bought, Quantity quantity_avaliable)
+        public void UpdateTicket(
+            Price price,
+            Location location,
+            Date data,
+            Quantity quantity_bought,
+            Quantity quantity_available)
         {
-            this.Price = price;
-            this.Location = location;
-            this.Date = data;
-            this.Quantity_bought = quantity_bought;
-            this.Quantity_avaliable = quantity_avaliable;
+            Price = price;
+            Location = location;
+            Data = data;
+            Quantity_bought = quantity_bought;
+            Quantity_available = quantity_available;
         }
 
         public void Sell(Quantity quantity)
         {
-            if (Quantity_available.Value < quantity)
+            if (Quantity_available.value < quantity.value)
                 throw new Exception("Ingressos insuficientes");
 
-            Quantity_bought = new Quantity(Quantity_bought.Value + quantity);
-            Quantity_available = new Quantity(Quantity_available.Value - quantity);
+            Quantity_bought =
+                new Quantity(Quantity_bought.value + quantity.value);
+
+            Quantity_available =
+                new Quantity(Quantity_available.value - quantity.value);
         }
     }
 }
+

@@ -1,12 +1,16 @@
-using System.Text;
 using Api_Venda_Ingressos.BoundedContext.Auth.Application.Services;
 using Api_Venda_Ingressos.BoundedContext.Auth.Application.UseCases;
 using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Data;
 using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository;
+using Api_Venda_Ingressos.BoundedContext.Sell.Application.Services;
+using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces;
+using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Data;
+using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AuthContext>(options =>
     options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<AppSellDbContext>(options => options.UseNpgsql(connectionString));
 
 // 2. INJEÇÃO DE DEPENDÊNCIA
 builder.Services.AddControllers();
@@ -25,6 +30,9 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<RegisterUserUseCase>();
 builder.Services.AddScoped<LoginUserUseCase>();
 builder.Services.AddScoped<TokenService>();
+
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<TicketService>();
 
 // 3. JWT AUTHENTICATION
 var jwt = builder.Configuration.GetSection("Jwt");

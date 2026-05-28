@@ -5,6 +5,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Domain.Entities
 {
     public class User : EntityBase
     {
+        
+
         public Name FirstName { get; private set; }
         public Name LastName { get; private set; }
         public Email Email { get; private set; }
@@ -12,6 +14,10 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Domain.Entities
         public UserRole Role { get; private set; }
         public CPF CPF { get; private set; }
         public DateOfBirth DateOfBirth { get; private set; }
+
+        protected User()
+        {
+        }
 
         public User(Name firstName, Name lastName, Email email, DateOfBirth dateOfBirth, CPF cpf, Password passwordHash, UserRole role)
         {

@@ -12,5 +12,8 @@ public class Location
             throw new Exception("O endereço do Evento deve ser inserido");
         }
 
+        this.value = value;
+
+
     }
 }

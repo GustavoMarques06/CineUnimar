@@ -1,10 +1,12 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities;
+﻿
+using Api_Venda_Ingressos.BoundedContext.Sell.Application.Interfaces;
+using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.ValueObjects;
 
 namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.Services
 {
-    public class TicketService
+    public class TicketService : ITicketService
     {
         private readonly ITicketRepository _ticketRepository;
 
@@ -13,49 +15,50 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.Services
             _ticketRepository = ticketRepository;
         }
 
-        public async Task<Ticket> CreateAsync(
+        public async Task<Ticket> SaveAsync(
             Price price,
             Location location,
             Date data,
-            Quantity quantityAvailable,
-            CancellationToken ct = default)
+            Quantity quantityAvailable)
         {
             var ticket = new Ticket(
                 price,
                 location,
                 data,
-                new Quantity(0), // inicialmente ninguém comprou
+                new Quantity(0),
                 quantityAvailable
             );
 
-            await _ticketRepository.SaveAsync(ticket, ct);
+            await _ticketRepository.SaveAsync(ticket);
 
             return ticket;
         }
 
-        public async Task<IEnumerable<Ticket>> GetAllAsync(CancellationToken ct = default)
+        public async Task<IEnumerable<Ticket>> GetAllAsync()
         {
-            return await _ticketRepository.GetAllAsync(ct);
+            return await _ticketRepository.GetAllAsync();
         }
 
-        public async Task<Ticket?> GetByIdAsync(Guid id, CancellationToken ct = default)
+        public async Task<Ticket?> GetByIdAsync(Guid id)
         {
-            return await _ticketRepository.GetByIdAsync(id, ct);
+            return await _ticketRepository.GetByIdAsync(id);
         }
 
-        public async Task SellAsync(Guid ticketId, int quantity, CancellationToken ct = default)
+        public async Task SellAsync(Guid ticketId, int quantity)
         {
-            var ticket = await _ticketRepository.GetByIdAsync(ticketId, ct);
+            var ticket = await _ticketRepository.GetByIdAsync(ticketId);
 
             if (ticket == null)
                 throw new Exception("Ticket não encontrado");
 
-            // regra de negócio
-            if (ticket.Quantity_available.Value < quantity)
+            if (ticket.Quantity_available.value < quantity)
                 throw new Exception("Ingressos insuficientes");
 
-            var newBought = new Quantity(ticket.Quantity_bought.Value + quantity);
-            var newAvailable = new Quantity(ticket.Quantity_available.Value - quantity);
+            var newBought =
+                new Quantity(ticket.Quantity_bought.value + quantity);
+
+            var newAvailable =
+                new Quantity(ticket.Quantity_available.value - quantity);
 
             ticket.UpdateTicket(
                 ticket.Price,
@@ -65,17 +68,18 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.Services
                 newAvailable
             );
 
-            await _ticketRepository.UpdateAsync(ticket, ct);
+            await _ticketRepository.UpdateAsync(ticket);
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken ct = default)
+        public async Task DeleteAsync(Guid id)
         {
-            var ticket = await _ticketRepository.GetByIdAsync(id, ct);
+            var ticket = await _ticketRepository.GetByIdAsync(id);
 
             if (ticket == null)
                 throw new Exception("Ticket não encontrado");
 
-            await _ticketRepository.DeleteAsync(ticket, ct);
+            await _ticketRepository.DeleteAsync(ticket);
         }
     }
 }
+

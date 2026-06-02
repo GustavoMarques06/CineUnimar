@@ -32,6 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="BoundedContext\Event\Application\Services\" />
 	  <Folder Include="BoundedContext\Sell\Application\UseCases\" />
 	</ItemGroup>
 

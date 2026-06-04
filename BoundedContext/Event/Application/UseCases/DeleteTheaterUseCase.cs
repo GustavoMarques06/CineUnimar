@@ -1,5 +1,7 @@
 ﻿using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.Interfaces;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases
 {
@@ -10,12 +12,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases
         {
             _theaterRepository = theaterRepository;
         }
-        public async void RunAsync(Theater theater)
+        public async Task RunAsync(Guid id)
         {
-            if (theater is null)
-                throw new ArgumentException("Teatro não pode ser nulo");
-
-            await _theaterRepository.UpdateAsync(theater);
+            await _theaterRepository.DeleteAsync(id);
         }
     }
 }

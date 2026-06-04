@@ -6,6 +6,6 @@
         Task<IEnumerable<Entities.Theater>> GetAllAsync();
         Task SaveAsync(Entities.Theater theater);
         Task UpdateAsync(Entities.Theater theater);
-        Task DeleteAsync(Entities.Theater theater);
+        Task DeleteAsync(Guid id);
     }
 }

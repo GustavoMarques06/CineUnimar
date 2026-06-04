@@ -10,7 +10,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases
         {
             _theaterRepository = theaterRepository;
         }
-        public async void RunAsync(Theater theater)
+        public async Task RunAsync(Theater theater)
         {
             if (theater is null)
                 throw new ArgumentException("Teatro não pode ser nulo");

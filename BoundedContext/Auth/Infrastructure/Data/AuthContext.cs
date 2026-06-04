@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Data;
 
-public class AppDbContext : DbContext
+public class AuthContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }
 
     public DbSet<User> Users { get; set; }
 

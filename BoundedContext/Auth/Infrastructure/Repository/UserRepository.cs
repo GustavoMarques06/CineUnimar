@@ -7,9 +7,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private readonly AppDbContext _context;
+        private readonly AuthContext _context;
 
-        public UserRepository(AppDbContext context)
+        public UserRepository(AuthContext context)
         {
             _context = context;
         }
@@ -43,7 +43,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository
 
         public async Task DeleteAsync(User user)
         {
-            _context.Users.Remove(user);
+            user.SoftDelete();
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
     }

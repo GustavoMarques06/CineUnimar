@@ -1,5 +1,4 @@
 ﻿using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Interfaces;
-using BCrypt.Net;
 
 namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.Services
 {

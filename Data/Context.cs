@@ -1,14 +1,16 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Entities;
-using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Enums;
+﻿
+using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Entities;
+using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Data;
+namespace Api_Venda_Ingressos.Data;
 
-public class AuthContext : DbContext
+public class Context : DbContext
 {
-    public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }
+    public Context(DbContextOptions<Context> options) : base(options) { }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Theater> Theaters { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

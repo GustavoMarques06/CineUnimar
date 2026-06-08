@@ -1,1 +1,0 @@
-talvez precise colocar DTOs (principalmente para criação de theater, etc)

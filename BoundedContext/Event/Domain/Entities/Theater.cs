@@ -3,7 +3,7 @@ using Api_Venda_Ingressos.BoundedContext.Sell.Domain.ValueObjects;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 
-public class Theater
+public class Theater : EntityBase
 {
     public Name Name { get; private set; }
     public string Location { get; private set; }

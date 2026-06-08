@@ -2,7 +2,7 @@ using Api_Venda_Ingressos.BoundedContext.Event.Domain.Enums;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 
-public class ChairsInEvent
+public class ChairsInEvent : EntityBase
 {
     public Guid IdRoomEvent { get; private set; }
     public ChairStatus Status { get; private set; }

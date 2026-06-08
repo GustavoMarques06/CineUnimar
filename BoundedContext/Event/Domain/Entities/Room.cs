@@ -2,7 +2,7 @@ using Api_Venda_Ingressos.BoundedContext.Event.Domain.ValueObjects;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 
-public class Room : EntityBase
+public class Room : EntityBase 
 {
     public Name Name { get; private set; }
     public Guid IdTheater { get; private set; }

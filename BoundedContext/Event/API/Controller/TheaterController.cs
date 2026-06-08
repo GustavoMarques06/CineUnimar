@@ -1,4 +1,5 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases;
+﻿using Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request;
+using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases;
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +58,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
         [HttpGet("create")]
-        public async Task<IActionResult> Create([FromRoute] Theater theater)
+        public async Task<IActionResult> Create([FromRoute] CreateTheaterRequest theater)
         {
             try
             {
@@ -71,7 +72,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
         [HttpGet("update")]
-        public async Task<IActionResult> Update([FromRoute] Theater theater)
+        public async Task<IActionResult> Update([FromRoute] UpdateTheaterRequest theater)
         {
             try
             {

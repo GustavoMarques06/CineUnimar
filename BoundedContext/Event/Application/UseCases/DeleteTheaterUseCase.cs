@@ -14,7 +14,12 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases
         }
         public async Task RunAsync(Guid id)
         {
-            await _theaterRepository.DeleteAsync(id);
+            var theater = await _theaterRepository.GetByIdAsync(id);
+
+            if (theater is null)
+                throw new ArgumentException("Teatro não encontrado");
+            
+            await _theaterRepository.DeleteAsync(theater);
         }
     }
 }

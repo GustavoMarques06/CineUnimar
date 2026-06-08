@@ -1,5 +1,7 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
+﻿using Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request;
+using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.Interfaces;
+using Api_Venda_Ingressos.BoundedContext.Event.Domain.ValueObjects;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases
 {
@@ -10,10 +12,12 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases
         {
             _theaterRepository = theaterRepository;
         }
-        public async Task<Theater> RunAsync(Theater theater)
+        public async Task<Theater> RunAsync(CreateTheaterRequest createTheater)
         {
-            if (theater is null)
+            if (createTheater is null)
                 throw new ArgumentException("Teatro não pode ser nulo");
+
+            var theater = new Theater(new Name(createTheater.Name), createTheater.Location);
 
             await _theaterRepository.SaveAsync(theater);
 

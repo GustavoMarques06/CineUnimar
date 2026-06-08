@@ -3,10 +3,14 @@ using Api_Venda_Ingressos.BoundedContext.Auth.Application.UseCases;
 using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Data;
 using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository;
+
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.Services;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Data;
 using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Repository;
+using Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases;
+
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,6 +24,8 @@ builder.Services.AddDbContext<AuthContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddDbContext<AppSellDbContext>(options => options.UseNpgsql(connectionString));
 
+
+
 // 2. INJEÇÃO DE DEPENDÊNCIA
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -30,6 +36,13 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<RegisterUserUseCase>();
 builder.Services.AddScoped<LoginUserUseCase>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+builder.Services.AddScoped<CreateTicketUseCase>();
+builder.Services.AddScoped<GetAllTicketUseCase>();
+builder.Services.AddScoped<GetTicketByIdUseCase>();
+builder.Services.AddScoped<SellTicketUseCase>();
+builder.Services.AddScoped<DeleteTicketUseCase>();
 
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<TicketService>();

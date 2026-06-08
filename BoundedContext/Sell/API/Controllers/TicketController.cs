@@ -1,6 +1,7 @@
 ﻿using Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Request;
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Response;
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.Services;
+using Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,30 +11,42 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
     [Route("api/tickets")]
     public class TicketController : ControllerBase
     {
-        private readonly TicketService _service;
+        private readonly CreateTicketUseCase _createTicketUseCase;
+        private readonly GetAllTicketUseCase _getAllTicketUseCase;
+        private readonly GetTicketByIdUseCase _getTicketByIdUseCase;
+        private readonly SellTicketUseCase _sellTicketUseCase;
+        private readonly DeleteTicketUseCase _deleteTicketUseCase;
 
-        public TicketController(TicketService service)
+        public TicketController(CreateTicketUseCase createTicketUseCase,
+    GetAllTicketUseCase getAllTicketsUseCase,
+    GetTicketByIdUseCase getTicketByIdUseCase,
+    SellTicketUseCase sellTicketUseCase,
+    DeleteTicketUseCase deleteTicketUseCase)
         {
-            _service = service;
+            _createTicketUseCase = createTicketUseCase;
+            _getAllTicketUseCase = getAllTicketsUseCase;
+            _getTicketByIdUseCase = getTicketByIdUseCase;
+            _sellTicketUseCase = sellTicketUseCase;
+            _deleteTicketUseCase = deleteTicketUseCase;
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTicketRequest request)
         {
-            var ticket = await _service.SaveAsync(
-                new Price(request.Price),
-                new Location(request.Location),
-                new Date(request.Date),
-                new Quantity(request.QuantityAvailable)
-            );
+            var ticket =
+                await _createTicketUseCase.RunAsync(request);
 
-            return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = ticket.Id },
+                ticket);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var tickets = await _service.GetAllAsync();
+            var tickets =
+                await _getAllTicketUseCase.RunAsync();
 
             var response = tickets.Select(t => new TicketResponse
             {
@@ -51,9 +64,10 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var ticket = await _service.GetByIdAsync(id);
+            var ticket =
+                await _getTicketByIdUseCase.RunAsync(id);
 
-            if (ticket == null)
+            if (ticket is null)
                 return NotFound();
 
             var response = new TicketResponse
@@ -70,11 +84,17 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         }
 
         [HttpPost("{id}/sell")]
-        public async Task<IActionResult> Sell(Guid id, [FromQuery] int quantity)
+        public async Task<IActionResult> Sell(Guid id, [FromQuery] Quantity quantity)
         {
             try
             {
-                await _service.SellAsync(id, quantity);
+                await _sellTicketUseCase.RunAsync(
+                    new SellTicketRequest
+                    {
+                        TicketId = id,
+                        quantity_bought = quantity
+                    }
+                    );
                 return Ok("Compra realizada com sucesso");
             }
             catch (Exception ex)
@@ -88,7 +108,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         {
             try
             {
-                await _service.DeleteAsync(id);
+                await _deleteTicketUseCase.RunAsync(id);
+
                 return NoContent();
             }
             catch (Exception ex)

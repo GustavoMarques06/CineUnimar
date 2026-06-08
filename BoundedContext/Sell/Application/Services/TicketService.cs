@@ -51,14 +51,12 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.Services
             if (ticket == null)
                 throw new Exception("Ticket não encontrado");
 
+            // regra de negócio
             if (ticket.Quantity_available.value < quantity)
                 throw new Exception("Ingressos insuficientes");
 
-            var newBought =
-                new Quantity(ticket.Quantity_bought.value + quantity);
-
-            var newAvailable =
-                new Quantity(ticket.Quantity_available.value - quantity);
+            var newBought = new Quantity(ticket.Quantity_bought.value + quantity);
+            var newAvailable = new Quantity(ticket.Quantity_available.value - quantity);
 
             ticket.UpdateTicket(
                 ticket.Price,

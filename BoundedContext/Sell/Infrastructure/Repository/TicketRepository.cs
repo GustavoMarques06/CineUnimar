@@ -1,6 +1,6 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities;
+﻿using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Data;
+using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces;
-using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Repository

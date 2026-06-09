@@ -6,6 +6,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Domain.Interfaces
     {
         Task<User?> GetByIdAsync(Guid id);
         Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByCpfAsync(string cpf);
         Task<IEnumerable<User>> GetAllAsync();
         Task SaveAsync(User user);
         Task UpdateAsync(User user);

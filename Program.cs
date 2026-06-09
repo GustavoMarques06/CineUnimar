@@ -1,12 +1,13 @@
-using System.Text;
 using Api_Venda_Ingressos.BoundedContext.Auth.Application.Services;
 using Api_Venda_Ingressos.BoundedContext.Auth.Application.UseCases;
 using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Data;
 using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository;
+using Api_Venda_Ingressos.Data.Mock;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,5 +69,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+using (var scope = app.Services.CreateScope())
+{
+    await AdminMock.SeedAsync(scope.ServiceProvider); //Adm mockado para ter acesso total
+}
 app.Run();

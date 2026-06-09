@@ -44,7 +44,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
         [HttpGet("get")]
-        public async Task<IActionResult> GeyById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             try
             {

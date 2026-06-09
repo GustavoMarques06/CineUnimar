@@ -12,6 +12,7 @@ public class Context : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Theater> Theaters { get; set; }
     public DbSet<Room> Rooms { get; set; }
+    public DbSet<RoomEvent> RoomsEvent { get; set; }
 
     public DbSet<Chair> Chairs { get; set; }
 

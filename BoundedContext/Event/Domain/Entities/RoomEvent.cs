@@ -10,4 +10,10 @@ public class RoomEvent : EntityBase
         IdRoom = idRoom;
         IsFull = isFull;
     }
+
+    public void UpdateRoom(Guid idRoom, bool isFull)
+    {
+        IdRoom = idRoom;
+        IsFull = isFull;
+    }
 }

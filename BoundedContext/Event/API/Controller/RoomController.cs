@@ -2,6 +2,7 @@
 using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases;
 using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.Room;
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,6 +60,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
         [HttpGet("create")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromRoute] CreateRoomRequest room)
         {
             try
@@ -73,6 +75,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
         [HttpGet("update")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromRoute] UpdateRoomRequest room)
         {
             try
@@ -87,6 +90,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
         [HttpGet("delete")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             try

@@ -9,16 +9,23 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.ChairUse
     public class CreateChairUseCase
     {
         private readonly IChairRepository _chairRepository;
+        private readonly IRoomRepository _roomRepository;
 
-        public CreateChairUseCase(IChairRepository chairRepository)
+        public CreateChairUseCase(IChairRepository chairRepository, IRoomRepository roomRepository)
         {
             _chairRepository = chairRepository;
+            _roomRepository = roomRepository;
         }
 
         public async Task<Chair> RunAsync(CreateChairRequest createChair)
         {
             if (createChair is null)
                 throw new ArgumentException("Cadeira não pode ser nulo");
+
+            var id_room = await _roomRepository.GetByIdAsync(createChair.IdRoom);
+
+            if (id_room is null)
+                throw new ArgumentException("Sala não Existe");
 
             var chair = new Chair(new ChairPosition(createChair.ChairPosition), createChair.IdRoom);
 

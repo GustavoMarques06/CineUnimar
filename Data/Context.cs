@@ -13,6 +13,8 @@ public class Context : DbContext
     public DbSet<Theater> Theaters { get; set; }
     public DbSet<Room> Rooms { get; set; }
 
+    public DbSet<Chair> Chairs { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(builder =>

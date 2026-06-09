@@ -1,8 +1,9 @@
+using Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request;
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.ValueObjects;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 
-public class Chair
+public class Chair : EntityBase
 {
     public ChairPosition ChairPosition { get; private set; }
     public Guid IdRoom { get; private set; }
@@ -11,5 +12,11 @@ public class Chair
     {
         ChairPosition = chairPosition;
         IdRoom = idRoom;
+    }
+
+    public void UpdateChair(ChairPosition ChairPosition, Guid IdRoom)
+    {
+        this.ChairPosition = ChairPosition;
+        this.IdRoom = IdRoom;
     }
 }

@@ -3,7 +3,7 @@ using Api_Venda_Ingressos.BoundedContext.Event.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
-namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases
+namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.TheaterUseCases
 {
     public class DeleteTheaterUseCase
     {

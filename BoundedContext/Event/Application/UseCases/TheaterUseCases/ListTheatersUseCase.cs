@@ -1,7 +1,7 @@
 ﻿using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.Interfaces;
 
-namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases
+namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.TheaterUseCases
 {
     public class ListTheatersUseCase
     {

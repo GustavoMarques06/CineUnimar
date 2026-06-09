@@ -24,6 +24,11 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository
             return await _context.Users.FirstOrDefaultAsync(u => u.Email.Value == email);
         }
 
+        public async Task<User?> GetByCpfAsync(string cpf)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.CPF.Value == cpf);
+        }
+
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _context.Users.ToListAsync();

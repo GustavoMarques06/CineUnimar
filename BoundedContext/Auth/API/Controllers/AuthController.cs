@@ -10,13 +10,16 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly RegisterUserUseCase _registerUserUseCase;
+        private readonly RegisterAdminUseCase _registerAdminUseCase;
         private readonly LoginUserUseCase _loginUserUseCase;
 
         public AuthController(
-            RegisterUserUseCase registerUserUseCase,
+            RegisterUserUseCase registerUserUseCase, 
+            RegisterAdminUseCase registerAdminUseCase,
             LoginUserUseCase loginUserUseCase)
         {
             _registerUserUseCase = registerUserUseCase;
+            _registerAdminUseCase = registerAdminUseCase;
             _loginUserUseCase = loginUserUseCase;
         }
 
@@ -35,6 +38,22 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.API.Controllers
             }
         }
 
+        [HttpPost("register-admin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterUserRequestDTO dto)
+        {
+            try
+            {
+                await _registerAdminUseCase.RunAsync(dto);
+                return Created("", new { message = "Admin cadastrado com sucesso!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+
         [HttpPost("login")]
         [AllowAnonymous] // Mais pra frente iremos precisar de endpoints que necessitem de autenticação, esse AllowAnonymous diz q n é necessário autenticação para acessar esse endpoint
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -49,5 +68,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.API.Controllers
                 return Unauthorized(new { error = ex.Message });
             }
         }
+
     }
 }

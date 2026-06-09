@@ -11,6 +11,7 @@ public class Context : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Theater> Theaters { get; set; }
+    public DbSet<Room> Rooms { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

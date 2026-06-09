@@ -1,5 +1,5 @@
 ﻿using Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request;
-using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases;
+using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.TheaterUseCases;
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

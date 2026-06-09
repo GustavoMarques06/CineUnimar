@@ -3,7 +3,7 @@ using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.ValueObjects;
 
-namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases
+namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.TheaterUseCases
 {
     public class CreateTheaterUseCase
     {

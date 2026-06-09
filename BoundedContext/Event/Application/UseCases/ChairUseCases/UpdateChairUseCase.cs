@@ -16,12 +16,12 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.ChairUse
         public async Task RunAsync(UpdateChairRequest updateChair)
         {
             var chair = await _chairRepository.GetByIdAsync(updateChair.Id);
-            var id_room = await _roomRepository.GetByIdAsync(updateChair.IdRoom);
+            var room = await _roomRepository.GetByIdAsync(updateChair.IdRoom);
 
             if (chair is null)
                 throw new ArgumentException("Cadeira não encontrada");
 
-            if (id_room is null)
+            if (room is null)
                 throw new ArgumentException("Sala não encontrada");
 
 

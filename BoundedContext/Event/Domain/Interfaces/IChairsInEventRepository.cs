@@ -1,11 +1,13 @@
-﻿namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Interfaces
+﻿using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
+
+namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Interfaces
 {
     public interface IChairsInEventRepository
     {
-        Task<Entities.ChairsInEvent?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Entities.ChairsInEvent>> GetAllAsync();
-        Task SaveAsync(Entities.ChairsInEvent chairsInEvent);
-        Task UpdateAsync(Entities.ChairsInEvent chairsInEvent);
-        Task DeleteAsync(Entities.ChairsInEvent chairsInEvent);
+        Task<ChairsInEvent?> GetByIdAsync(Guid id);
+        Task<IEnumerable<ChairsInEvent>> GetAllAsync();
+        Task SaveAsync(ChairsInEvent chairsInEvent);
+        Task UpdateAsync(ChairsInEvent chairsInEvent);
+        Task DeleteAsync(ChairsInEvent chairsInEvent);
     }
 }

@@ -15,6 +15,9 @@ public class Context : DbContext
 
     public DbSet<Chair> Chairs { get; set; }
 
+    public DbSet<ChairsInEvent> ChairsInEvent { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(builder =>

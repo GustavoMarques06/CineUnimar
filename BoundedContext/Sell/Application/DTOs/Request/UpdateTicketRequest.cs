@@ -2,7 +2,7 @@
 
 namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Request
 {
-    public class UpdateTicketRequest
+    public class UpdateTicketRequest : EntityBase
     {
         public Guid TicketId { get; set; }
         public Guid EventId { get; set; }

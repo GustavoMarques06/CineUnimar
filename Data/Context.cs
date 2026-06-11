@@ -18,6 +18,8 @@ public class Context : DbContext
 
     public DbSet<ChairsInEvent> ChairsInEvent { get; set; }
 
+    public DbSet<Events> Events { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -49,7 +51,7 @@ public class Context : DbContext
             builder.OwnsOne(u => u.PasswordHash, p => p.Property(p => p.Value).HasColumnName("password_hash").IsRequired());
         });
 
-        modelBuilder.Entity<Event>(builder =>
+        modelBuilder.Entity<Events>(builder =>
         {
             builder.ToTable("events");
             builder.HasKey(u => u.Id);

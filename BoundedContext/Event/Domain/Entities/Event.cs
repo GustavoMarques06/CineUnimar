@@ -3,7 +3,7 @@ using Api_Venda_Ingressos.BoundedContext.Event.Domain.ValueObjects;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 
-public class Event : EntityBase
+public class Events : EntityBase
 {
     public Name Name { get; private set; }
     public Description? Description { get; private set; }
@@ -14,7 +14,7 @@ public class Event : EntityBase
     public Guid CategoryId{ get; private set; }
     public Guid UserCreatorId { get; private set; }
 
-    public Event(Name name, Description? description, DateTime date, Duration duration, Guid roomId, EventStatus status, Guid categoryId, Guid userCreatorId)
+    public Events(Name name, Description? description, DateTime date, Duration duration, Guid roomId, EventStatus status, Guid categoryId, Guid userCreatorId)
     {
         Name = name;
         Description = description;
@@ -24,6 +24,11 @@ public class Event : EntityBase
         Status = status;
         CategoryId = categoryId;
         UserCreatorId = userCreatorId;
+    }
+
+    private Events()
+    {
+
     }
 
     internal object Property(Func<object, object> value)

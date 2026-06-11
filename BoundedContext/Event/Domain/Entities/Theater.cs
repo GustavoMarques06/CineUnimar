@@ -14,6 +14,11 @@ public class Theater : EntityBase
         Location = location;
     }
 
+    private Theater()
+    {
+
+    }
+
     public void UpdateTheater(Name name, string location)
     {
         this.Name = name;

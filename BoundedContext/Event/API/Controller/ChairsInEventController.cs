@@ -61,7 +61,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("create")]
+        [HttpPost("create")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromRoute] CreateChairInEventRequest chairInEvent)
         {
@@ -76,7 +76,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("update")]
+        [HttpPut("update")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromRoute] UpdateChairInEventRequest chairInEvent)
         {
@@ -92,7 +92,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
 
-        [HttpGet("delete")]
+        [HttpDelete("delete")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {

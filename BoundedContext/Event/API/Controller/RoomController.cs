@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
 {
+    [Route("api/Room")]
+    [ApiController]
     public class RoomController : ControllerBase
     {
         private readonly ListRoomsUseCase _listRoomsUseCase;
@@ -59,9 +61,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("create")]
+        [HttpPost("create")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([FromRoute] CreateRoomRequest room)
+        public async Task<IActionResult> Create([FromBody] CreateRoomRequest room)
         {
             try
             {
@@ -74,7 +76,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("update")]
+        [HttpPut("update")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromRoute] UpdateRoomRequest room)
         {
@@ -89,7 +91,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("delete")]
+        [HttpDelete("delete")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {

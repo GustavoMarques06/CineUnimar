@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
 {
+    [Route("api/Theater")]
+    [ApiController]
     public class TheaterController : ControllerBase
     {
         private readonly ListTheatersUseCase _listTheatersUseCase;
@@ -58,9 +60,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("create")]
+        [HttpPost("create")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([FromRoute] CreateTheaterRequest theater)
+        public async Task<IActionResult> Create([FromBody] CreateTheaterRequest theater)
         {
             try
             {
@@ -73,7 +75,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("update")]
+        [HttpPut("update")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromRoute] UpdateTheaterRequest theater)
         {
@@ -89,7 +91,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
 
-        [HttpGet("delete")]
+        [HttpDelete("delete")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {

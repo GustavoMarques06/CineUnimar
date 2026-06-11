@@ -13,6 +13,10 @@ public class Room : EntityBase
         IdTheater = idTheater;
     }
 
+    private Room()
+    {
+
+    }
     public void UpdateRoom(Name name, Guid idTheater)
     {
         Name = name;

@@ -14,6 +14,11 @@ public class ChairsInEvent : EntityBase
         Status = ChairStatus.Vacant;
     }
 
+    private ChairsInEvent()
+    {
+
+    }
+
     public void UpdateChairInEvent(ChairStatus Status, Guid IdRoomEvent)
     {
         this.Status = Status;

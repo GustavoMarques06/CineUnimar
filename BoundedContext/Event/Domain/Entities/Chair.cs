@@ -14,6 +14,11 @@ public class Chair : EntityBase
         IdRoom = idRoom;
     }
 
+    private Chair()
+    {
+
+    }
+
     public void UpdateChair(ChairPosition ChairPosition, Guid IdRoom)
     {
         this.ChairPosition = ChairPosition;

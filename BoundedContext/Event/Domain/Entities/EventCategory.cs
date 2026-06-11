@@ -12,4 +12,9 @@ public class EventCategory : EntityBase
         Name = name;
         Description = description;
     }
+
+    private EventCategory()
+    {
+
+    }
 }

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
 {
-    [Route("api/[controller]")]
+    [Route("api/Chair")]
     [ApiController]
     public class ChairController : ControllerBase
     {
@@ -60,9 +60,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
                 return BadRequest(new { error = ex.Message });
             }
         }
-        [HttpGet("create")]
+        [HttpPost("create")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([FromRoute] CreateChairRequest chair)
+        public async Task<IActionResult> Create([FromBody] CreateChairRequest chair)
         {
             try
             {

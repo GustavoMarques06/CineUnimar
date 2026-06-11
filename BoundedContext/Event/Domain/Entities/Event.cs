@@ -31,8 +31,13 @@ public class Events : EntityBase
 
     }
 
-    internal object Property(Func<object, object> value)
+    public void Update(Name name, Description? description, DateTime date, Duration duration, Guid roomId, EventStatus status)
     {
-        throw new NotImplementedException();
+        Name = name;
+        Description = description;
+        Date = date;
+        Duration = duration;
+        RoomId = roomId;
+        Status = status;
     }
 }

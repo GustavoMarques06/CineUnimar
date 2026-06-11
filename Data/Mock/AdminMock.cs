@@ -22,7 +22,7 @@ namespace Api_Venda_Ingressos.Data.Mock
                 new Name("Sistema"),
                 new Email(adminEmail),
                 DateOfBirth.Create(new DateTime(1990, 1, 1)),
-                new CPF("000.000.000-00"),
+                new CPF("631.111.324-66"),
                 new Password(hasher.Hash("Admin@123")),
                 UserRole.Admin
             );

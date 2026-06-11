@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
 {
+    [Route("api/RoomEvent")]
+    [ApiController]
     public class RoomEventController : ControllerBase
     {
         private readonly ListRoomsEventUseCase _listRoomsEventUseCase;
@@ -46,8 +48,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("get")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        [HttpGet("get/{id}")]
+        public async Task<IActionResult> GetById(Guid id)
         {
             try
             {
@@ -60,9 +62,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("create")]
+        [HttpPost("create")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([FromRoute] CreateRoomEventRequest room)
+        public async Task<IActionResult> Create([FromBody] CreateRoomEventRequest room)
         {
             try
             {
@@ -75,9 +77,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("update")]
+        [HttpPut("update")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Update([FromRoute] UpdateRoomEventRequest room)
+        public async Task<IActionResult> Update([FromBody] UpdateRoomEventRequest room)
         {
             try
             {
@@ -90,9 +92,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("delete")]
+        [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {

@@ -47,8 +47,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("get")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        [HttpGet("get/{id}")]
+        public async Task<IActionResult> GetById(Guid id)
         {
             try
             {
@@ -75,9 +75,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             }
         }
 
-        [HttpGet("update")]
+        [HttpPut("update")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Update([FromRoute] UpdateChairRequest chair)
+        public async Task<IActionResult> Update([FromBody] UpdateChairRequest chair)
         {
             try
             {
@@ -91,9 +91,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
 
-        [HttpGet("delete")]
+        [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {

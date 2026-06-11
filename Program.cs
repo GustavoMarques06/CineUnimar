@@ -7,7 +7,6 @@ using Api_Venda_Ingressos.Data.Mock;
 
 
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces;
-using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Data;
 using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Repository;
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases;
 
@@ -30,8 +29,7 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. BANCO DE DADOS
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<Context>(options =>
-    options.UseNpgsql(connectionString));
-builder.Services.AddDbContext<AppSellDbContext>(options => options.UseNpgsql(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 
@@ -54,8 +52,7 @@ builder.Services.AddScoped<GetAllTicketUseCase>();
 builder.Services.AddScoped<GetTicketByIdUseCase>();
 builder.Services.AddScoped<SellTicketUseCase>();
 builder.Services.AddScoped<DeleteTicketUseCase>();
-
-builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<ProcessPaymentUseCase>();
 
 //UseCases de Chair
 builder.Services.AddScoped<CreateChairUseCase>();
@@ -98,6 +95,10 @@ builder.Services.AddScoped<DeleteRoomEventUseCase>();
 builder.Services.AddScoped<IRoomEventRepository, RoomEventRepository>();
 
 builder.Services.AddScoped<CreateEventUseCase>();
+builder.Services.AddScoped<ListEventsUseCase>();
+builder.Services.AddScoped<GetEventByIdUseCase>();
+builder.Services.AddScoped<UpdateEventUseCase>();
+builder.Services.AddScoped<DeleteEventUseCase>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 
 // 3. JWT AUTHENTICATION

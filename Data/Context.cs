@@ -65,7 +65,6 @@ public class Context : DbContext
             builder.OwnsOne(u => u.Description, d => d.Property(p => p.Value).HasColumnName("descrição").IsRequired());
 
             builder.OwnsOne(u => u.Duration, d => d.Property(p => p.Value).HasColumnName("duração"));
-
         });
 
         modelBuilder.Entity<Theater>(builder =>
@@ -77,8 +76,6 @@ public class Context : DbContext
             builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
 
             builder.OwnsOne(u => u.Name, f => f.Property(p => p.Value).HasColumnName("name").HasMaxLength(100).IsRequired());
-
-
         });
 
         modelBuilder.Entity<Room>(builder =>
@@ -86,12 +83,17 @@ public class Context : DbContext
             builder.ToTable("rooms");
             builder.HasKey(u => u.Id);
             builder.Property(u => u.Id).HasColumnName("id");
+            builder.Property(u => u.IdTheater).HasColumnName("id_theater").IsRequired();
             builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
             builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
 
             builder.OwnsOne(u => u.Name, f => f.Property(p => p.Value).HasColumnName("name").HasMaxLength(100).IsRequired());
-
-
+            
+            builder.HasOne<Theater>() 
+                .WithMany()
+                .HasForeignKey(x => x.IdTheater)
+                .HasConstraintName("FK_rooms_theaters")
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Chair>(builder =>
@@ -99,11 +101,33 @@ public class Context : DbContext
             builder.ToTable("chairs");
             builder.HasKey(u => u.Id);
             builder.Property(u => u.Id).HasColumnName("id");
+            builder.Property(u => u.IdRoom).HasColumnName("id_room").IsRequired();
             builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
             builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
 
             builder.OwnsOne(u => u.ChairPosition, f => f.Property(p => p.Value).HasColumnName("chair_position").HasMaxLength(100).IsRequired());
         
+            builder.HasOne<Room>() 
+                .WithMany()
+                .HasForeignKey(x => x.IdRoom)
+                .HasConstraintName("FK_rooms_chairs")
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+        
+        modelBuilder.Entity<RoomEvent>(builder =>
+        {
+            builder.ToTable("rooms_in_event");
+            builder.HasKey(u => u.Id);
+            builder.Property(u => u.Id).HasColumnName("id");
+            builder.Property(u => u.IdRoom).HasColumnName("id_room").IsRequired(); 
+            builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
+            builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
+            
+            builder.HasOne<Room>() 
+                .WithMany()
+                .HasForeignKey(x => x.IdRoom)
+                .HasConstraintName("FK_rooms_in_event_rooms")
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<ChairsInEvent>(builder =>
@@ -111,9 +135,15 @@ public class Context : DbContext
             builder.ToTable("chairs_in_event");
             builder.HasKey(u => u.Id);
             builder.Property(u => u.Id).HasColumnName("id");
+            builder.Property(u => u.IdRoomEvent).HasColumnName("id_room_event").IsRequired();
             builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
             builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
 
+            builder.HasOne<RoomEvent>() 
+                .WithMany()
+                .HasForeignKey(x => x.IdRoomEvent)
+                .HasConstraintName("FK_rooms_in_event_rooms")
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

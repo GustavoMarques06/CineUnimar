@@ -3,7 +3,7 @@
     public class Name
     {
         protected Name() { }
-        public string Value { get; private set; }
+        public string Value { get; private set; } = null!;
         public Name(string value)
         {
             if (string.IsNullOrEmpty(value))

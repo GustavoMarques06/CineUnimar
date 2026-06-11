@@ -1,4 +1,4 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Auth.Application.DTOs.Request;
+using Api_Venda_Ingressos.BoundedContext.Auth.Application.DTOs.Request;
 using Api_Venda_Ingressos.BoundedContext.Auth.Application.UseCases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.API.Controllers
         private readonly LoginUserUseCase _loginUserUseCase;
 
         public AuthController(
-            RegisterUserUseCase registerUserUseCase, 
+            RegisterUserUseCase registerUserUseCase,
             RegisterAdminUseCase registerAdminUseCase,
             LoginUserUseCase loginUserUseCase)
         {
@@ -53,9 +53,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.API.Controllers
             }
         }
 
-
         [HttpPost("login")]
-        [AllowAnonymous] // Mais pra frente iremos precisar de endpoints que necessitem de autenticação, esse AllowAnonymous diz q n é necessário autenticação para acessar esse endpoint
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             try
@@ -68,6 +67,5 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.API.Controllers
                 return Unauthorized(new { error = ex.Message });
             }
         }
-
     }
 }

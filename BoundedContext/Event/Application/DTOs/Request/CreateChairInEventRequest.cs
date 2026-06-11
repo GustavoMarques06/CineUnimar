@@ -4,13 +4,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request
 {
     public class CreateChairInEventRequest
     {
-        public Guid IdRoomEvent { get; private set; }
-        public ChairStatus Status { get; private set; }
-
-        public CreateChairInEventRequest(Guid idRoomEvent, ChairStatus status)
-        {
-            IdRoomEvent = idRoomEvent;
-            Status = status;
-        }
+        public Guid IdRoomEvent { get; set; }
+        public ChairStatus Status { get; set; }
     }
 }

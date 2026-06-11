@@ -80,11 +80,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
             return Ok(response);
         }
 
-        /// <summary>
-        /// Compra um ingresso.
-        /// Regras: evento não pode ter passado, cadeira não pode estar ocupada.
-        /// Retorna o ticket com status Pending (aguardando aprovação do pagamento).
-        /// </summary>
         [HttpPost("sell")]
         public async Task<IActionResult> Sell([FromBody] SellTicketRequest request)
         {
@@ -108,9 +103,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Aprova o pagamento de um ingresso com status Pending.
-        /// </summary>
         [HttpPost("{id}/payment/approve")]
         public async Task<IActionResult> ApprovePayment(Guid id)
         {
@@ -125,9 +117,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Rejeita o pagamento de um ingresso com status Pending.
-        /// </summary>
         [HttpPost("{id}/payment/reject")]
         public async Task<IActionResult> RejectPayment(Guid id)
         {

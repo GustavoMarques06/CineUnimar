@@ -4,7 +4,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 
 public class Room : EntityBase 
 {
-    public Name Name { get; private set; }
+    public Name Name { get; private set; } = null!;
     public Guid IdTheater { get; private set; }
 
     public Room(Name name, Guid idTheater)

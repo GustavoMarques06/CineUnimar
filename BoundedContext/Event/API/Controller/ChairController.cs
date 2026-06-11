@@ -1,12 +1,7 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request;
+using Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request;
 using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.ChairUseCases;
-using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.TheaterUseCases;
-using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
 {
@@ -14,7 +9,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
     [ApiController]
     public class ChairController : ControllerBase
     {
-
         private readonly ListChairUseCase _listChairsUseCase;
         private readonly CreateChairUseCase _createChairUseCase;
         private readonly UpdateChairUseCase _updateChairUseCase;
@@ -29,9 +23,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             _deleteChairUseCase = deleteChairUseCase;
             _getChairByIdUseCase = getChairByIdUseCase;
         }
-
-
-
 
         [HttpGet("list")]
         public async Task<IActionResult> List()
@@ -60,14 +51,15 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
                 return BadRequest(new { error = ex.Message });
             }
         }
+
         [HttpPost("create")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] CreateChairRequest chair)
         {
             try
             {
-                await _createChairUseCase.RunAsync(chair);
-                return Ok("Cadeira cadastrada com sucesso!");
+                var result = await _createChairUseCase.RunAsync(chair);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -89,7 +81,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
                 return BadRequest(new { error = ex.Message });
             }
         }
-
 
         [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Admin")]

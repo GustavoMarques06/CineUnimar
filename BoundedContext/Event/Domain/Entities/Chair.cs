@@ -5,7 +5,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 
 public class Chair : EntityBase
 {
-    public ChairPosition ChairPosition { get; private set; }
+    public ChairPosition ChairPosition { get; private set; } = null!;
     public Guid IdRoom { get; private set; }
 
     public Chair(ChairPosition chairPosition, Guid idRoom)

@@ -4,7 +4,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request
 {
     public class CreateEventRequest
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public DateTime Date { get; set; }
         public int Duration { get; set; }

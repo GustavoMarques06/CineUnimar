@@ -34,7 +34,7 @@
             return idade;
         }
 
-        public override bool Equals(object obj) =>
+        public override bool Equals(object? obj) =>
             obj is DateOfBirth d && d.Value == Value;
 
         public override int GetHashCode() => Value.GetHashCode();

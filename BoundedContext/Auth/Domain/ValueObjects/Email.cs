@@ -3,7 +3,7 @@
     public class Email
     {
         protected Email() { }
-        public string Value { get; private set; }
+        public string Value { get; private set; } = null!;
         public Email(string value)
         {
             if (string.IsNullOrEmpty(value) || !value.Contains("@"))

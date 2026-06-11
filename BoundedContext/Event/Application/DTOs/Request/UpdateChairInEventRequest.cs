@@ -10,12 +10,5 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request
 
         public Guid IdRoomEvent { get; set; }
 
-        public UpdateChairInEventRequest(Guid id, ChairStatus status, Guid idRoomEvent)
-        {
-            this.Id = id;
-
-            Status = status;
-            IdRoomEvent = idRoomEvent;
-        }
     }
 }

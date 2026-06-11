@@ -5,7 +5,6 @@ using Api_Venda_Ingressos.Data;
 using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository;
 using Api_Venda_Ingressos.Data.Mock;
 
-
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Repository;
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases;
@@ -17,26 +16,47 @@ using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.TheaterUseCa
 using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.ChairInEventUseCases;
 using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.Room;
 using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.RoomEvent;
+using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.EventUseCases;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using System.Text;
-using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.EventUseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. BANCO DE DADOS
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-
 // 2. INJEÇÃO DE DEPENDÊNCIA
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
+
+// Swagger com suporte a JWT Bearer
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Venda de Ingressos API", Version = "v1" });
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Insira apenas o token JWT (sem o prefixo 'Bearer ')"
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecuritySchemeReference("Bearer", document),
+            new List<string>()
+        }
+    });
+});
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
@@ -108,6 +128,8 @@ builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.MapInboundClaims = true;
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -117,7 +139,7 @@ builder.Services
             ValidIssuer = jwt["Issuer"],
             ValidAudience = jwt["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                                           Encoding.UTF8.GetBytes(jwt["Secret"]!)),
+                Encoding.UTF8.GetBytes(jwt["Secret"]!)),
             ClockSkew = TimeSpan.Zero
         };
     });
@@ -129,10 +151,10 @@ var app = builder.Build();
 // 4. PIPELINE DE EXECUÇÃO
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/openapi/v1.json", "Venda de Ingressos API");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Venda de Ingressos API v1");
         options.RoutePrefix = "swagger";
     });
 }
@@ -143,8 +165,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
 using (var scope = app.Services.CreateScope())
 {
     await AdminMock.SeedAsync(scope.ServiceProvider); //Adm mockado para ter acesso total
 }
+
 app.Run();

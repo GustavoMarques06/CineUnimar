@@ -7,13 +7,13 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Domain.Entities
     {
         
 
-        public Name FirstName { get; private set; }
-        public Name LastName { get; private set; }
-        public Email Email { get; private set; }
-        public Password PasswordHash { get; private set; }
+        public Name FirstName { get; private set; } = null!;
+        public Name LastName { get; private set; } = null!;
+        public Email Email { get; private set; } = null!;
+        public Password PasswordHash { get; private set; } = null!;
         public UserRole Role { get; private set; }
-        public CPF CPF { get; private set; }
-        public DateOfBirth DateOfBirth { get; private set; }
+        public CPF CPF { get; private set; } = null!;
+        public DateOfBirth DateOfBirth { get; private set; } = null!;
 
         protected User()
         {

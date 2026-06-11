@@ -1,13 +1,7 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request;
+using Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request;
 using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.ChairInEventUseCases;
-using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.ChairUseCases;
-using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.TheaterUseCases;
-using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
 {
@@ -29,9 +23,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             _deleteChairsInEventUseCase = deleteChairsInEventUseCase;
             _getChairsInEventByIdUseCase = getChairsInEventByIdUseCase;
         }
-
-
-
 
         [HttpGet("list")]
         public async Task<IActionResult> List()
@@ -67,8 +58,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         {
             try
             {
-                await _createChairsInEventUseCase.RunAsync(chairInEvent);
-                return Ok("Cadeira vinculada ao evento cadastrada com sucesso!");
+                var result = await _createChairsInEventUseCase.RunAsync(chairInEvent);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -90,7 +81,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
                 return BadRequest(new { error = ex.Message });
             }
         }
-
 
         [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Admin")]

@@ -5,8 +5,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 
 public class Theater : EntityBase
 {
-    public Name Name { get; private set; }
-    public string Location { get; private set; }
+    public Name Name { get; private set; } = null!;
+    public string Location { get; private set; } = null!;
 
     public Theater(Name name, string location)
     {

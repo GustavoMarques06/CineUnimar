@@ -31,7 +31,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.Services
                 new Claim(JwtRegisteredClaimNames.Email, user.Email.Value),
                 new Claim(JwtRegisteredClaimNames.Name, $"{user.FirstName.Value} {user.LastName.Value}"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
+                new Claim("role", user.Role.ToString())
             };
 
             var token = new JwtSecurityToken(

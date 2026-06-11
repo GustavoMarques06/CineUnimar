@@ -1,7 +1,7 @@
 ﻿public class CPF
 {
     protected CPF() { }
-    public string Value { get; }
+    public string Value { get; } = null!;
     public CPF(string valor)
     {
         if (string.IsNullOrWhiteSpace(valor))

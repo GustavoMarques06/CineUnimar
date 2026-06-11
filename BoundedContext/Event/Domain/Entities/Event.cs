@@ -5,10 +5,10 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 
 public class Events : EntityBase
 {
-    public Name Name { get; private set; }
+    public Name Name { get; private set; } = null!;
     public Description? Description { get; private set; }
     public DateTime Date { get; private set; }
-    public Duration Duration { get; private set; }
+    public Duration Duration { get; private set; } = null!;
     public Guid RoomId { get; private set; }
     public EventStatus Status { get; private set; }
     public Guid CategoryId{ get; private set; }

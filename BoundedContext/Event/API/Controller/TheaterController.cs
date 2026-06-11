@@ -66,8 +66,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         {
             try
             {
-                await _createTheaterUseCase.RunAsync(theater);
-                return Ok("Teatro cadastrado com sucesso!");
+                var result = await _createTheaterUseCase.RunAsync(theater);
+                return Ok(result);
             }
             catch (Exception ex)
             {

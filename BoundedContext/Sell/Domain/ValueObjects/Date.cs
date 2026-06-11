@@ -11,7 +11,7 @@ public class Date
             throw new Exception("A data deve ser valida");
         }
 
-        if(value > DateTime.Today)
+        if(value > DateTime.Now)
         {
             throw new Exception("A data da compra não pode ser colocada para o futuro");
         }

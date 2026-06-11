@@ -3,7 +3,7 @@
     public class Password
     {
         protected Password() { }
-        public string Value { get; private set; }
+        public string Value { get; private set; } = null!;
         public Password(string value)
         {
             if (string.IsNullOrWhiteSpace(value))

@@ -68,8 +68,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         {
             try
             {
-                await _createRoomEventUseCase.RunAsync(room);
-                return Ok("Sala de evento cadastrada com sucesso!");
+                var result = await _createRoomEventUseCase.RunAsync(room);
+                return Ok(result);
             }
             catch (Exception ex)
             {

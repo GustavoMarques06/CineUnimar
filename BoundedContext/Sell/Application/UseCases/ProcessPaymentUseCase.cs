@@ -12,10 +12,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
             _ticketRepository = ticketRepository;
         }
 
-        /// <summary>
-        /// Aprova o pagamento de um ticket que está com status Pending.
-        /// Regra: só é possível aprovar um pagamento que ainda não foi processado.
-        /// </summary>
         public async Task ApproveAsync(Guid ticketId)
         {
             var ticket = await _ticketRepository.GetByIdAsync(ticketId);
@@ -34,10 +30,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
             await _ticketRepository.UpdateAsync(ticket);
         }
 
-        /// <summary>
-        /// Rejeita o pagamento de um ticket que está com status Pending.
-        /// Regra: só é possível rejeitar um pagamento pendente.
-        /// </summary>
         public async Task RejectAsync(Guid ticketId)
         {
             var ticket = await _ticketRepository.GetByIdAsync(ticketId);

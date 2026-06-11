@@ -5,10 +5,10 @@ public class RoomEvent : EntityBase
     public Guid IdRoom { get; private set; }
     public bool IsFull { get; private set; }
 
-    public RoomEvent(Guid idRoom, bool isFull)
+    public RoomEvent(Guid idRoom)
     {
         IdRoom = idRoom;
-        IsFull = isFull;
+        IsFull = false;
     }
 
     public void UpdateRoom(Guid idRoom, bool isFull)

@@ -24,7 +24,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.ChairInE
             
 
 
-            var chairInEvent = new ChairsInEvent(createChairInEvent.IdRoomEvent, createChairInEvent.Status);
+            var chairInEvent = new ChairsInEvent(createChairInEvent.IdRoomEvent);
 
             await _chairInEventRepository.SaveAsync(chairInEvent);
 

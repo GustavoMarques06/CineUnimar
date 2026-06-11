@@ -11,5 +11,10 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces
 
         Task UpdateAsync(Ticket ticket);
         Task DeleteAsync(Ticket ticket);
+
+        Task<bool> ExistsByChairInEventIdAsync(Guid chairInEventId);
+
+        Task<IEnumerable<Ticket>>GetTicketsByEventIdAsync(Guid eventId);
+
     }
 }

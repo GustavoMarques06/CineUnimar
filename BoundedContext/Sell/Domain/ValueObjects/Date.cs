@@ -13,7 +13,7 @@ public class Date
 
         if(value > DateTime.Today)
         {
-            throw new Exception("A data do evento não pode ser no futuro");
+            throw new Exception("A data da compra não pode ser colocada para o futuro");
         }
 
         this.value = value;

@@ -40,5 +40,15 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Repository
             _context.Tickets.Remove(ticket);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsByChairInEventIdAsync(Guid chairInEventId)
+        {
+            return await _context.Tickets.AnyAsync(t => t.Id == chairInEventId);
+        }
+
+        public async Task<IEnumerable<Ticket>> GetTicketsByEventIdAsync(Guid eventId)
+        {
+            return await _context.Tickets.Where(t => t.Id == eventId).ToListAsync();
+        }
     }
 }

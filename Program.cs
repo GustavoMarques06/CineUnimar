@@ -1,16 +1,17 @@
 using Api_Venda_Ingressos.BoundedContext.Auth.Application.Services;
 using Api_Venda_Ingressos.BoundedContext.Auth.Application.UseCases;
 using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Interfaces;
-using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Data;
+using Api_Venda_Ingressos.Data;
 using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository;
 using Api_Venda_Ingressos.Data.Mock;
 
-using Api_Venda_Ingressos.BoundedContext.Sell.Application.Services;
+
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Data;
 using Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Repository;
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases;
 
+using Api_Venda_Ingressos.BoundedContext.Event.Infrastructure.Repository;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddScoped<IUserRepository, TheaterRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<RegisterUserUseCase>();
 builder.Services.AddScoped<LoginUserUseCase>();
@@ -46,7 +47,7 @@ builder.Services.AddScoped<SellTicketUseCase>();
 builder.Services.AddScoped<DeleteTicketUseCase>();
 
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-builder.Services.AddScoped<TicketService>();
+
 
 // 3. JWT AUTHENTICATION
 var jwt = builder.Configuration.GetSection("Jwt");

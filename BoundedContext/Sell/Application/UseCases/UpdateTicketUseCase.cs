@@ -26,11 +26,10 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
                 throw new Exception("Ticket não encontrado");
 
             ticket.UpdateTicket(
-                new Price(request.Price),
-                new Location(request.Location),
-                new Date(request.Date),
-                ticket.Quantity_bought,
-                new Quantity(request.QuantityAvailable)
+                request.EventId,
+                request.ChairInEventId,
+                request.UserId,
+                new Price(request.Price)
             );
 
             await _ticketRepository.UpdateAsync(ticket);

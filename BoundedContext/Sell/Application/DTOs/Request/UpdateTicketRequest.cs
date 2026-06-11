@@ -1,11 +1,16 @@
-﻿namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Request
+﻿using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Entities;
+
+namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Request
 {
     public class UpdateTicketRequest
     {
         public Guid TicketId { get; set; }
+        public Guid EventId { get; set; }
+
+        public Guid ChairInEventId { get; set; }
+
+        public Guid UserId { get; set; }
+
         public double Price { get; set; }
-        public string Location { get; set; }
-        public DateTime Date { get; set; }
-        public int QuantityAvailable { get; set; }
     }
 }

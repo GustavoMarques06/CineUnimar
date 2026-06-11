@@ -1,6 +1,5 @@
 ﻿using Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Request;
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Response;
-using Api_Venda_Ingressos.BoundedContext.Sell.Application.Services;
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
@@ -52,10 +51,11 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
             {
                 Id = t.Id,
                 Price = t.Price.value,
-                Location = t.Location.value,
-                Date = t.Data.value,
-                QuantityBought = t.Quantity_bought.value,
-                QuantityAvailable = t.Quantity_available.value
+                //Location = t.Location.value,
+                Purchase_Data = t.Purchase_Data.value,
+                PaymentStatus = t.Status.ToString(),
+                //QuantityBought = t.Quantity_bought.value,
+                //QuantityAvailable = t.Quantity_available.value
             });
 
             return Ok(response);
@@ -73,17 +73,23 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
             var response = new TicketResponse
             {
                 Id = ticket.Id,
+                EventId = ticket.EventId,
+                ChairInEventId = ticket.ChairInEventId,
+                UserId = ticket.UserId,
                 Price = ticket.Price.value,
-                Location = ticket.Location.value,
-                Date = ticket.Data.value,
-                QuantityBought = ticket.Quantity_bought.value,
-                QuantityAvailable = ticket.Quantity_available.value
+                Purchase_Data = ticket.Purchase_Data.value,
+                PaymentStatus = ticket.Status.ToString(),
+
+                //Location = ticket.Location.value,
+               
+                //QuantityBought = ticket.Quantity_bought.value,
+                //QuantityAvailable = ticket.Quantity_available.value
             };
 
             return Ok(response);
         }
 
-        [HttpPost("{id}/sell")]
+        /*[HttpPost("{id}/sell")]
         public async Task<IActionResult> Sell(Guid id, [FromQuery] Quantity quantity)
         {
             try
@@ -96,6 +102,23 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
                     }
                     );
                 return Ok("Compra realizada com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }*/
+
+        [HttpPost("sell")]
+        public async Task<IActionResult> Sell(
+    [FromBody] SellTicketRequest request)
+        {
+            try
+            {
+                await _sellTicketUseCase.RunAsync(request);
+
+                return Ok(
+                    "Ingresso comprado com sucesso");
             }
             catch (Exception ex)
             {

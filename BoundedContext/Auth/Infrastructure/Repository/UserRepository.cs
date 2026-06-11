@@ -1,15 +1,15 @@
 ﻿using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Entities;
 using Api_Venda_Ingressos.BoundedContext.Auth.Domain.Interfaces;
-using Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Data;
+using Api_Venda_Ingressos.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api_Venda_Ingressos.BoundedContext.Auth.Infrastructure.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private readonly AuthContext _context;
+        private readonly Context _context;
 
-        public UserRepository(AuthContext context)
+        public UserRepository(Context context)
         {
             _context = context;
         }

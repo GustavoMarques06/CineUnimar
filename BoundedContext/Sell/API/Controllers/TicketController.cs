@@ -2,6 +2,7 @@
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Response;
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.ValueObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
@@ -30,6 +31,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] CreateTicketRequest request)
         {
             var ticket =
@@ -42,6 +44,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var tickets =
@@ -127,6 +130,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

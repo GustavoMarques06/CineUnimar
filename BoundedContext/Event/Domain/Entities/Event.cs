@@ -25,4 +25,9 @@ public class Event : EntityBase
         CategoryId = categoryId;
         UserCreatorId = userCreatorId;
     }
+
+    internal object Property(Func<object, object> value)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -48,5 +48,72 @@ public class Context : DbContext
 
             builder.OwnsOne(u => u.PasswordHash, p => p.Property(p => p.Value).HasColumnName("password_hash").IsRequired());
         });
+
+        modelBuilder.Entity<Event>(builder =>
+        {
+            builder.ToTable("events");
+            builder.HasKey(u => u.Id);
+            builder.Property(u => u.Id).HasColumnName("id");
+            builder.Property(u => u.Status).HasColumnName("status").HasConversion<string>().HasMaxLength(20).IsRequired();
+            builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
+            builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
+
+            builder.Property(u => u.Date).HasColumnName("Data");
+
+            builder.OwnsOne(u => u.Name, f => f.Property(p => p.Value).HasColumnName("name").HasMaxLength(100).IsRequired());
+
+            builder.OwnsOne(u => u.Description, d => d.Property(p => p.Value).HasColumnName("descrição").IsRequired());
+
+            builder.OwnsOne(u => u.Duration, d => d.Property(p => p.Value).HasColumnName("duração"));
+
+        });
+
+        modelBuilder.Entity<Theater>(builder =>
+        {
+            builder.ToTable("theaters");
+            builder.HasKey(u => u.Id);
+            builder.Property(u => u.Id).HasColumnName("id");
+            builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
+            builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
+
+            builder.OwnsOne(u => u.Name, f => f.Property(p => p.Value).HasColumnName("name").HasMaxLength(100).IsRequired());
+
+
+        });
+
+        modelBuilder.Entity<Room>(builder =>
+        {
+            builder.ToTable("rooms");
+            builder.HasKey(u => u.Id);
+            builder.Property(u => u.Id).HasColumnName("id");
+            builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
+            builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
+
+            builder.OwnsOne(u => u.Name, f => f.Property(p => p.Value).HasColumnName("name").HasMaxLength(100).IsRequired());
+
+
+        });
+
+        modelBuilder.Entity<Chair>(builder =>
+        {
+            builder.ToTable("chairs");
+            builder.HasKey(u => u.Id);
+            builder.Property(u => u.Id).HasColumnName("id");
+            builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
+            builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
+
+            builder.OwnsOne(u => u.ChairPosition, f => f.Property(p => p.Value).HasColumnName("chair_position").HasMaxLength(100).IsRequired());
+        
+        });
+
+        modelBuilder.Entity<ChairsInEvent>(builder =>
+        {
+            builder.ToTable("chairs_in_event");
+            builder.HasKey(u => u.Id);
+            builder.Property(u => u.Id).HasColumnName("id");
+            builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
+            builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
+
+        });
     }
 }

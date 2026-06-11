@@ -1,6 +1,10 @@
-﻿using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.Interfaces;
 using Api_Venda_Ingressos.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.Infrastructure.Repository
 {
@@ -23,22 +27,22 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Infrastructure.Repository
             return await _context.ChairsInEvent.ToListAsync();
         }
 
-        public async Task SaveAsync(Chair chair)
+        public async Task SaveAsync(ChairsInEvent chairInEvent)
         {
-            await _context.Chairs.AddAsync(chair);
+            await _context.ChairsInEvent.AddAsync(chairInEvent);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Chair chair)
+        public async Task UpdateAsync(ChairsInEvent chairInEvent)
         {
-            _context.Chairs.Update(chair);
+            _context.ChairsInEvent.Update(chairInEvent);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Chair chair)
+        public async Task DeleteAsync(ChairsInEvent chairInEvent)
         {
-            chair.SoftDelete();
-            _context.Chairs.Update(chair);
+            chairInEvent.SoftDelete();
+            _context.ChairsInEvent.Update(chairInEvent);
             await _context.SaveChangesAsync();
         }
     }

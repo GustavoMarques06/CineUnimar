@@ -31,7 +31,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.EventUse
                 request.Date,
                 new Duration(request.Duration),
                 request.RoomId,
-                request.Status);
+                request.Status,
+                request.Price);
 
             await _eventRepository.UpdateAsync(evento);
         }

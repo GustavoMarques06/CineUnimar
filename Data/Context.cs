@@ -62,6 +62,7 @@ public class Context : DbContext
             builder.Property(u => u.RoomId).HasColumnName("room_id").IsRequired();
             builder.Property(u => u.CategoryId).HasColumnName("category_id").IsRequired();
             builder.Property(u => u.UserCreatorId).HasColumnName("user_creator_id").IsRequired();
+            builder.Property(u => u.Price).HasColumnName("price").IsRequired().HasDefaultValue(0.0);
             builder.HasQueryFilter(u => u.RemovedAt == null);
 
             builder.OwnsOne(u => u.Name, f => f.Property(p => p.Value).HasColumnName("name").HasMaxLength(100).IsRequired());
@@ -147,6 +148,7 @@ public class Context : DbContext
             builder.Property(u => u.Status).HasColumnName("Status").HasConversion<int>();
             builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
             builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
+            builder.Property(u => u.RowVersion).IsRowVersion().HasColumnName("row_version");
             builder.HasQueryFilter(u => u.RemovedAt == null);
 
             builder.HasOne<RoomEvent>()
@@ -167,6 +169,7 @@ public class Context : DbContext
             builder.Property(u => u.Status).HasColumnName("status").HasConversion<int>().IsRequired();
             builder.Property(u => u.CreatedAt).HasColumnName("created_at").IsRequired();
             builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
+            builder.HasQueryFilter(u => u.RemovedAt == null);
 
             builder.OwnsOne(u => u.Purchase_Data, d => d.Property(p => p.value).HasColumnName("purchase_data").IsRequired());
             builder.OwnsOne(u => u.Price, d => d.Property(p => p.value).HasColumnName("price").IsRequired());

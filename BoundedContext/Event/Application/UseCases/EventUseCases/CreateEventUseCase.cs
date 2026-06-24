@@ -29,7 +29,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.EventUse
                 createEvent.RoomId,
                 createEvent.Status,
                 createEvent.CategoryId,
-                createEvent.UserCreatorId);
+                createEvent.UserCreatorId,
+                createEvent.Price);
 
             await _eventRepository.SaveAsync(events);
 

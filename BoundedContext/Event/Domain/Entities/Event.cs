@@ -11,10 +11,11 @@ public class Events : EntityBase
     public Duration Duration { get; private set; } = null!;
     public Guid RoomId { get; private set; }
     public EventStatus Status { get; private set; }
-    public Guid CategoryId{ get; private set; }
+    public Guid CategoryId { get; private set; }
     public Guid UserCreatorId { get; private set; }
+    public double Price { get; private set; }
 
-    public Events(Name name, Description? description, DateTime date, Duration duration, Guid roomId, EventStatus status, Guid categoryId, Guid userCreatorId)
+    public Events(Name name, Description? description, DateTime date, Duration duration, Guid roomId, EventStatus status, Guid categoryId, Guid userCreatorId, double price)
     {
         Name = name;
         Description = description;
@@ -24,6 +25,7 @@ public class Events : EntityBase
         Status = status;
         CategoryId = categoryId;
         UserCreatorId = userCreatorId;
+        Price = price >= 0 ? price : throw new ArgumentException("Preço do evento não pode ser negativo.");
     }
 
     private Events()
@@ -31,7 +33,7 @@ public class Events : EntityBase
 
     }
 
-    public void Update(Name name, Description? description, DateTime date, Duration duration, Guid roomId, EventStatus status)
+    public void Update(Name name, Description? description, DateTime date, Duration duration, Guid roomId, EventStatus status, double price)
     {
         Name = name;
         Description = description;
@@ -39,5 +41,6 @@ public class Events : EntityBase
         Duration = duration;
         RoomId = roomId;
         Status = status;
+        Price = price >= 0 ? price : throw new ArgumentException("Preço do evento não pode ser negativo.");
     }
 }

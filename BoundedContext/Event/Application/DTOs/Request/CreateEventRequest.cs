@@ -12,5 +12,6 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request
         public EventStatus Status { get; set; }
         public Guid CategoryId { get; set; }
         public Guid UserCreatorId { get; set; }
+        public double Price { get; set; }
     }
 }

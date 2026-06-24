@@ -1,80 +1,108 @@
 # Sistema de Compra de Ingressos
 
-API REST para gerenciamento e venda de ingressos para eventos, desenvolvida com ASP.NET Core 10 seguindo os princípios de Domain-Driven Design (DDD).
+Sistema fullstack para gerenciamento e venda de ingressos para eventos, com API REST em ASP.NET Core e interface web em React.
 
 ## Tecnologias
 
+**Backend**
 - **.NET 10** — ASP.NET Core Web API
-- **Entity Framework Core 10** — ORM com SQL Server (LocalDB)
-- **JWT Bearer** — Autenticação e autorização por roles
-- **Swashbuckle / Swagger UI** — Documentação e testes interativos
+- **Entity Framework Core 10** — ORM com SQL Server LocalDB
+- **JWT Bearer** — Autenticação e autorização por roles (Admin/User)
+- **BCrypt.Net** — Hash de senhas
+- **Swagger / Swashbuckle** — Documentação interativa da API
+
+**Frontend**
+- **React 18** com TypeScript
+- **Vite** — Build tool
+- **React Router v6** — Roteamento client-side
+- **Tailwind CSS** — Estilização
+- **Axios** — Requisições HTTP
 
 ## Arquitetura
 
-O projeto é organizado em dois **Bounded Contexts**:
+O backend segue **Domain-Driven Design (DDD)** com três Bounded Contexts independentes:
 
 ```
 BoundedContext/
-├── Auth/          -> Autenticação, cadastro e login de usuários
-├── Event/         -> Gestão de teatros, salas, cadeiras e eventos
-└── Sell/          -> Venda e pagamento de ingressos
+├── Auth/    — Cadastro, login e gerenciamento de usuários
+├── Event/   — Teatros, salas, cadeiras e eventos
+└── Sell/    — Venda e pagamento de ingressos
 ```
 
-Cada contexto segue a separação em camadas:
+Cada contexto é dividido em camadas:
 
 ```
-Controller -> UseCase -> Domain (Entities / ValueObjects) -> Repository
+Controller → UseCase → Domain (Entities / ValueObjects) → Repository
 ```
 
 ## Pré-requisitos
 
 - .NET 10 SDK
 - SQL Server LocalDB
+- Node.js 18+
 
 ## Como executar
+
+### Backend
 
 ```bash
 # 1. Clonar o repositório
 git clone <url-do-repositorio>
 cd Sistema-de-Compra-de-Ingressos
 
-# 2. Aplicar as migrations (cria o banco de dados)
+# 2. Criar o banco de dados
 dotnet ef database update
 
-# 3. Rodar a aplicação
+# 3. Iniciar a API
 dotnet run
 ```
 
-A API estará disponível em `https://localhost:{porta}`.  
-Acesse o Swagger em: `https://localhost:{porta}/swagger`
+A API estará disponível em:
+- HTTP: `http://localhost:5071`
+- HTTPS: `https://localhost:7121`
+- Swagger: `https://localhost:7121/swagger`
 
-> O usuário administrador padrão é criado automaticamente na primeira execução.
+### Frontend
+
+```bash
+cd frontend
+
+# Instalar dependências
+npm install
+
+# Iniciar em modo desenvolvimento
+npm run dev
+```
 
 ## Autenticação
 
 A API usa JWT Bearer. Para acessar endpoints protegidos:
 
-1. Faça login em `POST /api/auth/login`
+1. Faça `POST /api/auth/login` com e-mail e senha
 2. Copie o `accessToken` da resposta
 3. No Swagger, clique em **Authorize** e cole o token (sem o prefixo `Bearer`)
 
-### Usuário Admin padrão
+### Usuário admin padrão
+
+Criado automaticamente na primeira execução:
 
 | Campo | Valor |
 |---|---|
-| Email | `admin@sistema.com` |
+| E-mail | `admin@sistema.com` |
 | Senha | `Admin@123` |
 
 ## Endpoints
 
 ### Auth
+
 | Método | Rota | Acesso | Descrição |
 |---|---|---|---|
 | POST | `/api/auth/register` | Público | Cadastra usuário comum |
-| POST | `/api/auth/login` | Público | Login, retorna JWT |
-| POST | `/api/auth/register-admin` | Admin | Cadastra novo admin |
+| POST | `/api/auth/login` | Público | Login — retorna JWT |
+| POST | `/api/auth/register-admin` | Admin | Cadastra novo administrador |
 
 ### Theater
+
 | Método | Rota | Acesso |
 |---|---|---|
 | GET | `/api/Theater/list` | Público |
@@ -84,6 +112,7 @@ A API usa JWT Bearer. Para acessar endpoints protegidos:
 | DELETE | `/api/Theater/delete/{id}` | Admin |
 
 ### Room
+
 | Método | Rota | Acesso |
 |---|---|---|
 | GET | `/api/Room/list` | Público |
@@ -93,6 +122,7 @@ A API usa JWT Bearer. Para acessar endpoints protegidos:
 | DELETE | `/api/Room/delete/{id}` | Admin |
 
 ### RoomEvent
+
 | Método | Rota | Acesso |
 |---|---|---|
 | GET | `/api/RoomEvent/list` | Público |
@@ -102,6 +132,7 @@ A API usa JWT Bearer. Para acessar endpoints protegidos:
 | DELETE | `/api/RoomEvent/delete/{id}` | Admin |
 
 ### Chair
+
 | Método | Rota | Acesso |
 |---|---|---|
 | GET | `/api/Chair/list` | Público |
@@ -111,6 +142,7 @@ A API usa JWT Bearer. Para acessar endpoints protegidos:
 | DELETE | `/api/Chair/delete/{id}` | Admin |
 
 ### ChairsInEvent
+
 | Método | Rota | Acesso |
 |---|---|---|
 | GET | `/api/ChairsInEvent/list` | Público |
@@ -120,6 +152,7 @@ A API usa JWT Bearer. Para acessar endpoints protegidos:
 | DELETE | `/api/ChairsInEvent/delete/{id}` | Admin |
 
 ### Events
+
 | Método | Rota | Acesso |
 |---|---|---|
 | GET | `/api/Events/list` | Público |
@@ -129,22 +162,23 @@ A API usa JWT Bearer. Para acessar endpoints protegidos:
 | DELETE | `/api/Events/delete/{id}` | Admin |
 
 ### Tickets
+
 | Método | Rota | Acesso | Descrição |
 |---|---|---|---|
 | GET | `/api/tickets` | Público | Lista todos os tickets |
 | GET | `/api/tickets/{id}` | Público | Busca ticket por ID |
 | POST | `/api/tickets` | Público | Cria ticket manualmente |
-| POST | `/api/tickets/sell` | Público | Compra ingresso (valida regras) |
+| POST | `/api/tickets/sell` | Público | Compra ingresso (aplica regras de negócio) |
 | POST | `/api/tickets/{id}/payment/approve` | Público | Aprova pagamento |
 | POST | `/api/tickets/{id}/payment/reject` | Público | Rejeita pagamento |
 | DELETE | `/api/tickets/{id}` | Público | Remove ticket |
 
-## Regras de Negócio
+## Regras de negócio
 
-- Não é possível comprar ingresso para um **evento que já ocorreu**
-- Não é possível comprar ingresso para eventos com status **Ended** ou **Cancelled**
+- Não é possível comprar ingresso para um evento que já ocorreu
+- Não é possível comprar ingresso para eventos com status **Finalizado** ou **Cancelado**
 - Uma cadeira **ocupada** não pode ser reservada novamente
-- Ao comprar, o ingresso fica com status **Pending** até o pagamento ser processado
+- Ao comprar, o ingresso fica com status **Pendente** até o pagamento ser processado
 - O pagamento pode ser **aprovado** ou **rejeitado** separadamente
 
 ## Enums

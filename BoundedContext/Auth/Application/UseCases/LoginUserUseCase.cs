@@ -21,16 +21,21 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.UseCases
             _tokenService = tokenService;
         }
 
+        // Dummy hash usado quando o usuário não existe, para manter tempo de resposta constante.
+        private const string _dummyHash = "$2a$12$OVPWh8X8C0bJ3Z5Y2fK1duD7OLROzHTMhJJO0EjGLkXfHoWp5XJRa";
+
         public async Task<LoginResponse> RunAsync(LoginRequest request)
         {
             var user = await _userRepository.GetByEmailAsync(request.Email);
 
-            if (user is null)
-                throw new UnauthorizedAccessException("Credenciais inválidas.");
-            if (user.IsDeleted)                                          
-                throw new UnauthorizedAccessException("Credenciais inválidas.");
-            bool senhaValida = _passwordHasher.Verify(request.Password, user.PasswordHash.Value);
-            if (!senhaValida)
+            // Sempre executa bcrypt para evitar timing attack (enumeração de e-mails).
+            var hashToVerify = (user is null || user.IsDeleted)
+                ? _dummyHash
+                : user.PasswordHash.Value;
+
+            bool senhaValida = _passwordHasher.Verify(request.Password, hashToVerify);
+
+            if (user is null || user.IsDeleted || !senhaValida)
                 throw new UnauthorizedAccessException("Credenciais inválidas.");
 
             var (token, expiresAt) = _tokenService.GenerateToken(user);

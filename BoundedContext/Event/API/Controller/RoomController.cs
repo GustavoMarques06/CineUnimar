@@ -31,6 +31,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
         [HttpGet("list")]
+        [Authorize]
         public async Task<IActionResult> List([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
             try
@@ -48,11 +49,13 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
         [HttpGet("get/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
             {
                 var response = await _getRoomByIdUseCase.RunAsync(id);
+                if (response is null) return NotFound();
                 return Ok(response);
             }
             catch (Exception ex)

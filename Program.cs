@@ -149,8 +149,10 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 // 3. JWT AUTHENTICATION
 var jwt = builder.Configuration.GetSection("Jwt");
 var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET")
-    ?? jwt["Secret"]
-    ?? throw new InvalidOperationException("JWT Secret não configurado. Defina a variável de ambiente JWT_SECRET.");
+    ?? jwt["Secret"];
+if (string.IsNullOrWhiteSpace(jwtSecret) || jwtSecret.Length < 32)
+    throw new InvalidOperationException(
+        "JWT_SECRET não configurado ou muito curto (mínimo 32 caracteres). Defina a variável de ambiente JWT_SECRET.");
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -14,13 +14,26 @@ namespace Api_Venda_Ingressos.Data.Mock
             var hasher = services.GetRequiredService<IPasswordHasher>();
             var config = services.GetRequiredService<IConfiguration>();
 
-            var adminEmail = config["Admin:Email"] ?? "admin@sistema.com";
-            var existing = await repo.GetByEmailAsync(adminEmail);
+            var adminEmail = Environment.GetEnvironmentVariable("ADMIN_EMAIL")
+                ?? config["Admin:Email"];
+            if (string.IsNullOrWhiteSpace(adminEmail))
+                throw new InvalidOperationException(
+                    "Credencial do admin não configurada. Defina a variável de ambiente ADMIN_EMAIL.");
 
+            var existing = await repo.GetByEmailAsync(adminEmail);
             if (existing is not null) return;
 
-            var adminPassword = config["Admin:Password"] ?? "Admin@123";
-            var adminCpf = config["Admin:Cpf"] ?? "52998224725";
+            var adminPassword = Environment.GetEnvironmentVariable("ADMIN_PASSWORD")
+                ?? config["Admin:Password"];
+            if (string.IsNullOrWhiteSpace(adminPassword))
+                throw new InvalidOperationException(
+                    "Credencial do admin não configurada. Defina a variável de ambiente ADMIN_PASSWORD.");
+
+            var adminCpf = Environment.GetEnvironmentVariable("ADMIN_CPF")
+                ?? config["Admin:Cpf"];
+            if (string.IsNullOrWhiteSpace(adminCpf))
+                throw new InvalidOperationException(
+                    "Credencial do admin não configurada. Defina a variável de ambiente ADMIN_CPF.");
 
             var admin = new User(
                 new Name("Admin"),

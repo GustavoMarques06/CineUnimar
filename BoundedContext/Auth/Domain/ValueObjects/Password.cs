@@ -16,11 +16,21 @@
             if (string.IsNullOrWhiteSpace(rawPassword))
                 throw new Exception("Senha não pode ser vazia.");
 
+            // bcrypt trunca silenciosamente em 72 bytes; senhas maiores seriam equivalentes.
+            if (System.Text.Encoding.UTF8.GetByteCount(rawPassword) > 72)
+                throw new Exception("Senha não pode ultrapassar 72 caracteres.");
+
             if (rawPassword.Length < 12)
                 throw new Exception("Senha deve ter pelo menos 12 caracteres.");
 
-            if (!rawPassword.Any(char.IsUpper) || !rawPassword.Any(char.IsDigit))
-                throw new Exception("A senha deve conter ao menos uma letra maiúscula e um número.");
+            if (!rawPassword.Any(char.IsUpper))
+                throw new Exception("A senha deve conter ao menos uma letra maiúscula.");
+
+            if (!rawPassword.Any(char.IsDigit))
+                throw new Exception("A senha deve conter ao menos um número.");
+
+            if (!rawPassword.Any(c => !char.IsLetterOrDigit(c)))
+                throw new Exception("A senha deve conter ao menos um caractere especial.");
         }
     }
 }

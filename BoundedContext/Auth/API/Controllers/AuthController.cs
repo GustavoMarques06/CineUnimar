@@ -79,10 +79,11 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.API.Controllers
                     response.ExpiresAt
                 });
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException)
             {
-                return Unauthorized(new { error = ex.Message });
+                return Unauthorized(new { error = "Credenciais inválidas." });
             }
+            // Outras exceções inesperadas sobem para o handler global (nunca expõem detalhes internos).
         }
 
         [HttpPost("logout")]

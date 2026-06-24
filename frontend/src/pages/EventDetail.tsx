@@ -9,12 +9,10 @@ import { val, numVal } from '../api/client'
 import { useAuth } from '../contexts/AuthContext'
 import SeatMap from '../components/SeatMap'
 
-const PRICE = 35.0
-
 export default function EventDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { user, userId } = useAuth()
+  const { user } = useAuth()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [event, setEvent] = useState<any>(null)
@@ -51,20 +49,16 @@ export default function EventDetail() {
 
   const handleBuy = async () => {
     if (!selectedSeat) return
-    if (!user || !userId) {
+    if (!user) {
       navigate('/login')
       return
     }
     setError('')
     setBuying(true)
     try {
-      // SellTicketUseCase already creates + validates the ticket internally
       await sellTicket({
-        ticketId: '00000000-0000-0000-0000-000000000000', // ignored by backend
-        userId,
         eventId: id!,
         chairInEventId: selectedSeat,
-        price: PRICE,
       })
       setSuccess(true)
     } catch (err: unknown) {
@@ -115,6 +109,7 @@ export default function EventDetail() {
   const description = val(event.description)
   const duration = numVal(event.duration)
   const date = new Date(val(event.date) || event.date)
+  const price = numVal(event.price)
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
@@ -149,7 +144,7 @@ export default function EventDetail() {
               </div>
               <div className="border-t border-gray-100 pt-3">
                 <p className="text-xs text-gray-400 mb-1">Valor do ingresso</p>
-                <p className="text-2xl font-bold text-indigo-600">R$ {PRICE.toFixed(2).replace('.', ',')}</p>
+                <p className="text-2xl font-bold text-indigo-600">R$ {price.toFixed(2).replace('.', ',')}</p>
               </div>
             </div>
           </div>
@@ -173,7 +168,7 @@ export default function EventDetail() {
               <div>
                 {selectedSeat ? (
                   <p className="text-sm text-gray-600">
-                    Assento selecionado · <span className="font-semibold text-indigo-600">R$ {PRICE.toFixed(2).replace('.', ',')}</span>
+                    Assento selecionado · <span className="font-semibold text-indigo-600">R$ {price.toFixed(2).replace('.', ',')}</span>
                   </p>
                 ) : (
                   <p className="text-sm text-gray-400">Selecione um assento para continuar</p>

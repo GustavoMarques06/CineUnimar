@@ -1,8 +1,6 @@
 ﻿using Api_Venda_Ingressos.BoundedContext.Event.Application.DTOs.Request;
 using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.TheaterUseCases;
-using Api_Venda_Ingressos.BoundedContext.Event.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
@@ -33,12 +31,15 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
             try
             {
-                var response = await _listTheatersUseCase.RunAsync();
-                return Ok(response);
+                pageSize = Math.Clamp(pageSize, 1, 100);
+                page = Math.Max(1, page);
+                var all = (await _listTheatersUseCase.RunAsync()).ToList();
+                var items = all.Skip((page - 1) * pageSize).Take(pageSize);
+                return Ok(new { total = all.Count, page, pageSize, items });
             }
             catch (Exception ex)
             {

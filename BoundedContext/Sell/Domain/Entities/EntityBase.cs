@@ -9,6 +9,14 @@
         public EntityBase()
         {
             Id = Guid.NewGuid();
+            CreatedAt = DateTime.UtcNow;
+        }
+
+        public void SoftDelete()
+        {
+            if (RemovedAt.HasValue)
+                throw new InvalidOperationException("Entidade já foi removida.");
+            RemovedAt = DateTime.UtcNow;
         }
     }
 }

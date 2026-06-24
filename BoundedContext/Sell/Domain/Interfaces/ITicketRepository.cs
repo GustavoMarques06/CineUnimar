@@ -14,7 +14,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces
 
         Task<bool> ExistsByChairInEventIdAsync(Guid chairInEventId);
 
-        Task<IEnumerable<Ticket>>GetTicketsByEventIdAsync(Guid eventId);
-
+        Task<IEnumerable<Ticket>> GetTicketsByEventIdAsync(Guid eventId);
+        Task<IEnumerable<Ticket>> GetByUserIdAsync(Guid userId);
     }
 }

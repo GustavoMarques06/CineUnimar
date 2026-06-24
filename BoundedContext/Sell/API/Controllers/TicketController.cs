@@ -1,48 +1,70 @@
-using Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Request;
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Response;
+using Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Request;
 using Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
 {
     [ApiController]
     [Route("api/tickets")]
+    [Authorize]
     public class TicketController : ControllerBase
     {
-        private readonly CreateTicketUseCase _createTicketUseCase;
         private readonly GetAllTicketUseCase _getAllTicketUseCase;
         private readonly GetTicketByIdUseCase _getTicketByIdUseCase;
+        private readonly GetTicketsByUserIdUseCase _getTicketsByUserIdUseCase;
         private readonly SellTicketUseCase _sellTicketUseCase;
         private readonly DeleteTicketUseCase _deleteTicketUseCase;
         private readonly ProcessPaymentUseCase _processPaymentUseCase;
 
         public TicketController(
-            CreateTicketUseCase createTicketUseCase,
             GetAllTicketUseCase getAllTicketsUseCase,
             GetTicketByIdUseCase getTicketByIdUseCase,
+            GetTicketsByUserIdUseCase getTicketsByUserIdUseCase,
             SellTicketUseCase sellTicketUseCase,
             DeleteTicketUseCase deleteTicketUseCase,
             ProcessPaymentUseCase processPaymentUseCase)
         {
-            _createTicketUseCase = createTicketUseCase;
             _getAllTicketUseCase = getAllTicketsUseCase;
             _getTicketByIdUseCase = getTicketByIdUseCase;
+            _getTicketsByUserIdUseCase = getTicketsByUserIdUseCase;
             _sellTicketUseCase = sellTicketUseCase;
             _deleteTicketUseCase = deleteTicketUseCase;
             _processPaymentUseCase = processPaymentUseCase;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateTicketRequest request)
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
-            var ticket = await _createTicketUseCase.RunAsync(request);
-            return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
+            pageSize = Math.Clamp(pageSize, 1, 100);
+            page = Math.Max(1, page);
+
+            var all = (await _getAllTicketUseCase.RunAsync()).ToList();
+            var items = all.Skip((page - 1) * pageSize).Take(pageSize).Select(t => new TicketResponse
+            {
+                Id = t.Id,
+                EventId = t.EventId,
+                ChairInEventId = t.ChairInEventId,
+                UserId = t.UserId,
+                Price = t.Price.value,
+                Purchase_Data = t.Purchase_Data.value,
+                PaymentStatus = t.Status.ToString()
+            });
+
+            return Ok(new { total = all.Count, page, pageSize, items });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("mine")]
+        public async Task<IActionResult> GetMine()
         {
-            var tickets = await _getAllTicketUseCase.RunAsync();
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!Guid.TryParse(userIdStr, out var userId))
+                return Unauthorized();
+
+            var tickets = await _getTicketsByUserIdUseCase.RunAsync(userId);
 
             var response = tickets.Select(t => new TicketResponse
             {
@@ -66,6 +88,12 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
             if (ticket is null)
                 return NotFound();
 
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && ticket.UserId.ToString() != userIdStr)
+                return Forbid();
+
             var response = new TicketResponse
             {
                 Id = ticket.Id,
@@ -85,7 +113,11 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         {
             try
             {
-                var ticket = await _sellTicketUseCase.RunAsync(request);
+                var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!Guid.TryParse(userIdStr, out var userId))
+                    return Unauthorized();
+
+                var ticket = await _sellTicketUseCase.RunAsync(request, userId);
 
                 return CreatedAtAction(
                     nameof(GetById),
@@ -104,6 +136,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         }
 
         [HttpPost("{id}/payment/approve")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ApprovePayment(Guid id)
         {
             try
@@ -118,6 +151,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         }
 
         [HttpPost("{id}/payment/reject")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RejectPayment(Guid id)
         {
             try
@@ -132,6 +166,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

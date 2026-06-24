@@ -37,7 +37,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Repository
 
         public async Task DeleteAsync(Ticket ticket)
         {
-            _context.Ticket.Remove(ticket);
+            ticket.SoftDelete();
+            _context.Ticket.Update(ticket);
             await _context.SaveChangesAsync();
         }
 
@@ -49,6 +50,11 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Infrastructure.Repository
         public async Task<IEnumerable<Ticket>> GetTicketsByEventIdAsync(Guid eventId)
         {
             return await _context.Ticket.Where(t => t.EventId == eventId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Ticket>> GetByUserIdAsync(Guid userId)
+        {
+            return await _context.Ticket.Where(t => t.UserId == userId).ToListAsync();
         }
     }
 }

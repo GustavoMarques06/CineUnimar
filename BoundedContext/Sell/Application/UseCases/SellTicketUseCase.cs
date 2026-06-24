@@ -5,6 +5,7 @@ using Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Request;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
 {
@@ -27,7 +28,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
             _getChairUseCase = getChairUseCase;
         }
 
-        public async Task<Ticket> RunAsync(SellTicketRequest request)
+        public async Task<Ticket> RunAsync(SellTicketRequest request, Guid userId)
         {
             var evento = await _eventRepository.GetByIdAsync(request.EventId);
 
@@ -48,14 +49,21 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
             if (chair.Status == ChairStatus.Occupied)
                 throw new Exception("Esta cadeira já está ocupada. Escolha outra disponível.");
 
-            chair.OccupyChair();
-            await _chairsInEventRepository.UpdateAsync(chair);
+            try
+            {
+                chair.OccupyChair();
+                await _chairsInEventRepository.UpdateAsync(chair);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new Exception("Esta cadeira foi reservada por outro usuário simultaneamente. Escolha outra ou tente novamente.");
+            }
 
             var ticket = new Ticket(
                 request.EventId,
                 request.ChairInEventId,
-                request.UserId,
-                new Price(request.Price));
+                userId,
+                new Price(evento.Price));
 
             await _ticketRepository.SaveAsync(ticket);
 

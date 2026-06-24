@@ -1,4 +1,4 @@
-# Sistema de Compra de Ingressos
+# CineUnimar
 
 Sistema fullstack para gerenciamento e venda de ingressos para eventos, com API REST em ASP.NET Core e interface web em React.
 

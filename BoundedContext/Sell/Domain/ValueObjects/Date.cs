@@ -6,15 +6,11 @@ public class Date
 
     public Date(DateTime value)
     {
-        if(value.Day < 0 || value.Month < 0 || value.Year < 0)
-        {
-            throw new Exception("A data deve ser valida");
-        }
+        if(value == default)
+            throw new Exception("A data deve ser válida.");
 
-        if(value > DateTime.Now)
-        {
-            throw new Exception("A data da compra não pode ser colocada para o futuro");
-        }
+        if(value > DateTime.UtcNow)
+            throw new Exception("A data da compra não pode ser colocada para o futuro.");
 
         this.value = value;
     }

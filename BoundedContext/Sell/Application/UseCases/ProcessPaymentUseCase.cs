@@ -1,6 +1,7 @@
 using Api_Venda_Ingressos.BoundedContext.Event.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Enums;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces;
+using Api_Venda_Ingressos.Data;
 
 namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
 {
@@ -8,13 +9,16 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
     {
         private readonly ITicketRepository _ticketRepository;
         private readonly IChairsInEventRepository _chairsInEventRepository;
+        private readonly Context _context;
 
         public ProcessPaymentUseCase(
             ITicketRepository ticketRepository,
-            IChairsInEventRepository chairsInEventRepository)
+            IChairsInEventRepository chairsInEventRepository,
+            Context context)
         {
             _ticketRepository = ticketRepository;
             _chairsInEventRepository = chairsInEventRepository;
+            _context = context;
         }
 
         public async Task ApproveAsync(Guid ticketId)
@@ -45,14 +49,26 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
             if (ticket.Status != PaymentStatus.Pending)
                 throw new Exception($"Não é possível rejeitar um pagamento com status '{ticket.Status}'.");
 
-            ticket.RejectPayment();
-            await _ticketRepository.UpdateAsync(ticket);
-
-            var chair = await _chairsInEventRepository.GetByIdAsync(ticket.ChairInEventId);
-            if (chair is not null && chair.Status == Api_Venda_Ingressos.BoundedContext.Event.Domain.Enums.ChairStatus.Occupied)
+            // Transação garante que rejeição do ticket e liberação da cadeira são atômicas.
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                chair.VacateChair();
-                await _chairsInEventRepository.UpdateAsync(chair);
+                ticket.RejectPayment();
+                await _ticketRepository.UpdateAsync(ticket);
+
+                var chair = await _chairsInEventRepository.GetByIdAsync(ticket.ChairInEventId);
+                if (chair is not null && chair.Status == Api_Venda_Ingressos.BoundedContext.Event.Domain.Enums.ChairStatus.Occupied)
+                {
+                    chair.VacateChair();
+                    await _chairsInEventRepository.UpdateAsync(chair);
+                }
+
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
             }
         }
     }

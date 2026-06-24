@@ -9,7 +9,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities
         public Guid ChairInEventId { get; private set; }
         public Guid UserId { get; private set; }
         public Price Price { get; private set; } = null!;
-        public Date Purchase_Data { get; private set; } = null!;
+        public Date PurchaseDate { get; private set; } = null!;
         public PaymentStatus Status { get; private set; }
 
         private Ticket()
@@ -26,7 +26,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities
             ChairInEventId = chairInEventId;
             UserId = userId;
             Price = price;
-            Purchase_Data = new Date(DateTime.Now);
+            PurchaseDate = new Date(DateTime.UtcNow);
             Status = PaymentStatus.Pending;
         }
 

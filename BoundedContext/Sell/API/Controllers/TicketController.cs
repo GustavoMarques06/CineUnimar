@@ -50,7 +50,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
                 ChairInEventId = t.ChairInEventId,
                 UserId = t.UserId,
                 Price = t.Price.value,
-                Purchase_Data = t.Purchase_Data.value,
+                PurchaseDate = t.PurchaseDate.value,
                 PaymentStatus = t.Status.ToString()
             });
 
@@ -73,7 +73,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
                 ChairInEventId = t.ChairInEventId,
                 UserId = t.UserId,
                 Price = t.Price.value,
-                Purchase_Data = t.Purchase_Data.value,
+                PurchaseDate = t.PurchaseDate.value,
                 PaymentStatus = t.Status.ToString()
             });
 
@@ -101,7 +101,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.API.Controllers
                 ChairInEventId = ticket.ChairInEventId,
                 UserId = ticket.UserId,
                 Price = ticket.Price.value,
-                Purchase_Data = ticket.Purchase_Data.value,
+                PurchaseDate = ticket.PurchaseDate.value,
                 PaymentStatus = ticket.Status.ToString()
             };
 

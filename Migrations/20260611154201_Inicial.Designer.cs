@@ -577,7 +577,7 @@ namespace Api_Venda_Ingressos.Migrations
 
             modelBuilder.Entity("Api_Venda_Ingressos.BoundedContext.Sell.Domain.Entities.Ticket", b =>
                 {
-                    b.OwnsOne("Api_Venda_Ingressos.BoundedContext.Sell.Domain.ValueObjects.Date", "Purchase_Data", b1 =>
+                    b.OwnsOne("Api_Venda_Ingressos.BoundedContext.Sell.Domain.ValueObjects.Date", "PurchaseDate", b1 =>
                         {
                             b1.Property<Guid>("TicketId")
                                 .HasColumnType("uniqueidentifier");
@@ -614,7 +614,7 @@ namespace Api_Venda_Ingressos.Migrations
                     b.Navigation("Price")
                         .IsRequired();
 
-                    b.Navigation("Purchase_Data")
+                    b.Navigation("PurchaseDate")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

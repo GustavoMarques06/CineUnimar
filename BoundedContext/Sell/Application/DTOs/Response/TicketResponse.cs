@@ -9,7 +9,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.DTOs.Response
         public Guid UserId { get; set; }
         public Guid ChairInEventId { get; set; }
         public double Price { get; set; }
-        public DateTime Purchase_Data { get; set; }
+        public DateTime PurchaseDate { get; set; }
         public string PaymentStatus { get; set; } = string.Empty;
     }
 }

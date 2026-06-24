@@ -171,7 +171,7 @@ public class Context : DbContext
             builder.Property(u => u.RemovedAt).HasColumnName("removed_at");
             builder.HasQueryFilter(u => u.RemovedAt == null);
 
-            builder.OwnsOne(u => u.Purchase_Data, d => d.Property(p => p.value).HasColumnName("purchase_data").IsRequired());
+            builder.OwnsOne(u => u.PurchaseDate, d => d.Property(p => p.value).HasColumnName("purchase_data").IsRequired());
             builder.OwnsOne(u => u.Price, d => d.Property(p => p.value).HasColumnName("price").IsRequired());
         });
     }

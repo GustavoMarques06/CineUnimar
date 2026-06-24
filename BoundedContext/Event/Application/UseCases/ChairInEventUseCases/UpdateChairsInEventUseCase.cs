@@ -10,8 +10,8 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.ChairInE
         public UpdateChairsInEventUseCase(IChairsInEventRepository chairInEventRepository)
         {
             _chairInEventRepository = chairInEventRepository;
-
         }
+
         public async Task RunAsync(UpdateChairInEventRequest updateChairInEvent)
         {
             var chairInEvent = await _chairInEventRepository.GetByIdAsync(updateChairInEvent.Id);
@@ -19,12 +19,18 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.ChairInE
             if (chairInEvent is null)
                 throw new ArgumentException("Cadeira não encontrada");
 
+            // Mudanças de status passam pelos métodos de domínio para manter os invariantes.
+            if (updateChairInEvent.Status != chairInEvent.Status)
+            {
+                if (updateChairInEvent.Status == ChairStatus.Occupied)
+                    chairInEvent.OccupyChair();
+                else if (updateChairInEvent.Status == ChairStatus.Vacant)
+                    chairInEvent.VacateChair();
+                else
+                    throw new ArgumentException($"Status inválido: {updateChairInEvent.Status}");
+            }
 
-
-            chairInEvent.UpdateChairInEvent(
-                Status: updateChairInEvent.Status,
-                IdRoomEvent: updateChairInEvent.IdRoomEvent
-            );
+            chairInEvent.UpdateRoomEvent(updateChairInEvent.IdRoomEvent);
 
             await _chairInEventRepository.UpdateAsync(chairInEvent);
         }

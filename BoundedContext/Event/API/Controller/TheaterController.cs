@@ -53,6 +53,7 @@ namespace Api_Venda_Ingressos.BoundedContext.Event.API.Controller
             try
             {
                 var response = await _getTheaterByIdUseCase.RunAsync(id);
+                if (response is null) return NotFound();
                 return Ok(response);
             }
             catch (Exception ex)

@@ -20,10 +20,9 @@ public class ChairsInEvent : EntityBase
 
     }
 
-    public void UpdateChairInEvent(ChairStatus Status, Guid IdRoomEvent)
+    public void UpdateRoomEvent(Guid idRoomEvent)
     {
-        this.Status = Status;
-        this.IdRoomEvent = IdRoomEvent;
+        IdRoomEvent = idRoomEvent;
     }
 
     public void OccupyChair()

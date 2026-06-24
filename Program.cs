@@ -19,16 +19,41 @@ using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.RoomEvent;
 using Api_Venda_Ingressos.BoundedContext.Event.Application.UseCases.EventUseCases;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. BANCO DE DADOS
 builder.Services.AddDbContext<Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// CORS — AllowCredentials requer origens explícitas (não wildcard)
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()
+    ?? ["http://localhost:5173"];
+builder.Services.AddCors(options =>
+    options.AddPolicy("Frontend", policy =>
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials()));
+
+// RATE LIMITING — 5 tentativas por minuto no login
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("login", o =>
+    {
+        o.PermitLimit = 5;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueLimit = 0;
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
 
 // 2. INJEÇÃO DE DEPENDÊNCIA
 builder.Services.AddControllers();
@@ -67,9 +92,9 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
 //UseCases de Ticket
-builder.Services.AddScoped<CreateTicketUseCase>();
 builder.Services.AddScoped<GetAllTicketUseCase>();
 builder.Services.AddScoped<GetTicketByIdUseCase>();
+builder.Services.AddScoped<GetTicketsByUserIdUseCase>();
 builder.Services.AddScoped<SellTicketUseCase>();
 builder.Services.AddScoped<DeleteTicketUseCase>();
 builder.Services.AddScoped<ProcessPaymentUseCase>();
@@ -123,6 +148,9 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 
 // 3. JWT AUTHENTICATION
 var jwt = builder.Configuration.GetSection("Jwt");
+var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET")
+    ?? jwt["Secret"]
+    ?? throw new InvalidOperationException("JWT Secret não configurado. Defina a variável de ambiente JWT_SECRET.");
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -139,8 +167,20 @@ builder.Services
             ValidIssuer = jwt["Issuer"],
             ValidAudience = jwt["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwt["Secret"]!)),
+                Encoding.UTF8.GetBytes(jwtSecret)),
             ClockSkew = TimeSpan.Zero
+        };
+
+        // Lê o token do cookie httpOnly se não houver Authorization header
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = ctx =>
+            {
+                if (string.IsNullOrEmpty(ctx.Token) &&
+                    ctx.Request.Cookies.TryGetValue("access_token", out var cookieToken))
+                    ctx.Token = cookieToken;
+                return Task.CompletedTask;
+            }
         };
     });
 
@@ -149,6 +189,15 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // 4. PIPELINE DE EXECUÇÃO
+
+// Tratamento global de erros — nunca expõe ex.Message ao cliente em produção
+app.UseExceptionHandler(errApp => errApp.Run(async ctx =>
+{
+    ctx.Response.StatusCode = StatusCodes.Status500InternalServerError;
+    ctx.Response.ContentType = "application/json";
+    await ctx.Response.WriteAsJsonAsync(new { error = "Erro interno do servidor." });
+}));
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -161,6 +210,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("Frontend");
+
+app.UseRateLimiter();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -168,7 +221,7 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    await AdminMock.SeedAsync(scope.ServiceProvider); //Adm mockado para ter acesso total
+    await AdminMock.SeedAsync(scope.ServiceProvider);
 }
 
 app.Run();

@@ -1,10 +1,9 @@
 import client from './client'
-import type { CreateTicketRequest, SellTicketRequest } from '../types'
+import type { SellTicketRequest } from '../types'
 
 export const listTickets = () => client.get('/tickets').then((r) => r.data)
+export const listMyTickets = () => client.get('/tickets/mine').then((r) => r.data)
 export const getTicket = (id: string) => client.get(`/tickets/${id}`).then((r) => r.data)
-export const createTicket = (data: CreateTicketRequest) =>
-  client.post('/tickets', data).then((r) => r.data)
 export const sellTicket = (data: SellTicketRequest) =>
   client.post('/tickets/sell', data).then((r) => r.data)
 export const approvePayment = (id: string) =>

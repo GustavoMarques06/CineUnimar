@@ -1,12 +1,7 @@
 import axios from 'axios'
 
-const client = axios.create({ baseURL: '/api' })
-
-client.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token')
-  if (token) config.headers.Authorization = `Bearer ${token}`
-  return config
-})
+// withCredentials envia o cookie httpOnly em todas as requisições automaticamente
+const client = axios.create({ baseURL: '/api', withCredentials: true })
 
 // Helper to extract value from DDD value objects (string or { value: string })
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

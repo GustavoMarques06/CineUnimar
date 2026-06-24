@@ -1,10 +1,3 @@
-export interface LoginResponse {
-  accessToken: string
-  expiresAt: string
-  userName: string
-  role: string
-}
-
 export interface User {
   id: string
   firstName: string
@@ -65,6 +58,7 @@ export interface Event {
   status: EventStatus
   categoryId: string
   userCreatorId: string
+  price: number
 }
 
 export enum EventStatus {
@@ -90,19 +84,7 @@ export enum PaymentStatus {
   Rejected = 3,
 }
 
-export interface CreateTicketRequest {
-  eventId: string
-  userId: string
-  chairInEventId: string
-  price: number
-  date: string
-  paymentStatus: PaymentStatus
-}
-
 export interface SellTicketRequest {
-  ticketId: string
-  userId: string
   eventId: string
   chairInEventId: string
-  price: number
 }

@@ -1,8 +1,13 @@
 import client from './client'
-import type { LoginResponse } from '../types'
 
 export const login = (email: string, password: string) =>
-  client.post<LoginResponse>('/auth/login', { email, password }).then((r) => r.data)
+  client.post<{ userName: string; role: string; expiresAt: string }>('/auth/login', { email, password }).then((r) => r.data)
+
+export const logout = () =>
+  client.post('/auth/logout').then((r) => r.data)
+
+export const me = () =>
+  client.get<{ userId: string; email: string; userName: string; role: string }>('/auth/me').then((r) => r.data)
 
 export const register = (data: {
   firstName: string

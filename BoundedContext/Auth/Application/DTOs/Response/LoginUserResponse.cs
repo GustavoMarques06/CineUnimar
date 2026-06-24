@@ -1,4 +1,4 @@
-﻿namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.DTOs.Response
+namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.DTOs.Response
 {
     public class LoginResponse
     {

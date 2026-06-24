@@ -1,59 +1,55 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
-import type { LoginResponse } from '../types'
-import { login as apiLogin } from '../api/auth'
+import { login as apiLogin, logout as apiLogout, me as apiMe } from '../api/auth'
 
-interface AuthContextType {
-  user: LoginResponse | null
-  userId: string | null  // GUID from JWT sub claim
-  isAdmin: boolean
-  login: (email: string, password: string) => Promise<void>
-  logout: () => void
-  isLoading: boolean
+interface UserInfo {
+  userId: string
+  email: string
+  userName: string
+  role: string
 }
 
-function decodeUserId(token: string): string | null {
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]))
-    return payload.sub ?? null
-  } catch {
-    return null
-  }
+interface AuthContextType {
+  user: UserInfo | null
+  isAdmin: boolean
+  login: (email: string, password: string) => Promise<void>
+  logout: () => Promise<void>
+  isLoading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<LoginResponse | null>(null)
-  const [userId, setUserId] = useState<string | null>(null)
+  const [user, setUser] = useState<UserInfo | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  // Verifica sessão via cookie httpOnly ao carregar o app
   useEffect(() => {
-    const stored = localStorage.getItem('user')
-    const token = localStorage.getItem('token')
-    if (stored) setUser(JSON.parse(stored))
-    if (token) setUserId(decodeUserId(token))
-    setIsLoading(false)
+    apiMe()
+      .then((data) => setUser(data))
+      .catch(() => setUser(null))
+      .finally(() => setIsLoading(false))
   }, [])
 
   const login = async (email: string, password: string) => {
+    // O backend seta o cookie httpOnly; recebemos apenas os dados de exibição
     const data = await apiLogin(email, password)
-    localStorage.setItem('token', data.accessToken)
-    localStorage.setItem('user', JSON.stringify(data))
-    setUser(data)
-    setUserId(decodeUserId(data.accessToken))
+    // Busca as informações completas (incluindo userId) via /me
+    const info = await apiMe()
+    setUser(info)
+    // Suprime aviso — data.userName/role usados apenas para validação de sucesso
+    void data
   }
 
-  const logout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
+  const logout = async () => {
+    await apiLogout()
     setUser(null)
-    setUserId(null)
   }
 
+  // isAdmin vem de dados verificados pelo servidor — não do localStorage
   const isAdmin = user?.role === 'Admin'
 
   return (
-    <AuthContext.Provider value={{ user, userId, isAdmin, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, isAdmin, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   )

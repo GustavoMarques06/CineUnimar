@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Ticket, Calendar, CreditCard } from 'lucide-react'
-import { listTickets } from '../api/tickets'
+import { listMyTickets } from '../api/tickets'
 import { val, numVal } from '../api/client'
-import { useAuth } from '../contexts/AuthContext'
 
 // API returns paymentStatus as string: "Pending", "Approved", "Rejected"
 const STATUS_INFO: Record<string, { label: string; color: string }> = {
@@ -12,25 +11,16 @@ const STATUS_INFO: Record<string, { label: string; color: string }> = {
 }
 
 export default function MyTickets() {
-  const { userId } = useAuth()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tickets, setTickets] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    listTickets()
-      .then((all) => {
-        const mine = userId
-          ? all.filter(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (t: any) => String(val(t.userId) || t.userId).toLowerCase() === userId.toLowerCase()
-            )
-          : all
-        setTickets(mine)
-      })
+    listMyTickets()
+      .then((data) => setTickets(data))
       .catch(() => setTickets([]))
       .finally(() => setLoading(false))
-  }, [userId])
+  }, [])
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">

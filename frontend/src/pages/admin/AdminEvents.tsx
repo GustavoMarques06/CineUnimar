@@ -31,7 +31,8 @@ const emptyForm = {
 }
 
 export default function AdminEvents() {
-  const { userId } = useAuth()
+  const { user } = useAuth()
+  const userId = user?.userId
   const [items, setItems] = useState<Item[]>([])
   const [rooms, setRooms] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)

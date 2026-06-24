@@ -74,7 +74,7 @@ export interface Ticket {
   userId: string
   chairInEventId: string
   price: number
-  purchase_Data: string
+  purchaseDate: string
   paymentStatus: PaymentStatus
 }
 

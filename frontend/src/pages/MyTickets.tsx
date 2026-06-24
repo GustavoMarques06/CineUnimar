@@ -47,7 +47,7 @@ export default function MyTickets() {
             const id = val(ticket.id) || ticket.id
             const status: string = ticket.paymentStatus ?? ticket.PaymentStatus ?? 'Pending'
             const price = numVal(ticket.price)
-            const date = new Date(ticket.purchase_Data ?? ticket.Purchase_Data ?? Date.now())
+            const date = new Date(ticket.purchaseDate ?? Date.now())
             const statusInfo = STATUS_INFO[status] ?? STATUS_INFO['Pending']
 
             return (

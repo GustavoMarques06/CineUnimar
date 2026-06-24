@@ -82,7 +82,7 @@ export default function AdminTickets() {
               const price = numVal(item.price)
               const status = getStatus(item)
               const statusInfo = STATUS_INFO[status] ?? STATUS_INFO['Pending']
-              const date = new Date(item.purchase_Data ?? item.Purchase_Data ?? Date.now())
+              const date = new Date(item.purchaseDate ?? Date.now())
               const isUpdating = updating === id
 
               return (

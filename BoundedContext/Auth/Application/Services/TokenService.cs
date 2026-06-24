@@ -18,7 +18,9 @@ namespace Api_Venda_Ingressos.BoundedContext.Auth.Application.Services
 
         public (string token, DateTime expiresAt) GenerateToken(User user)
         {
-            var secret = _configuration["Jwt:Secret"]!;
+            var secret = Environment.GetEnvironmentVariable("JWT_SECRET")
+                ?? _configuration["Jwt:Secret"]
+                ?? throw new InvalidOperationException("JWT Secret não configurado.");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

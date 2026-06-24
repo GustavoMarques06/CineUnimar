@@ -7,6 +7,7 @@ public class ChairsInEvent : EntityBase
 {
     public Guid IdRoomEvent { get; private set; }
     public ChairStatus Status { get; private set; }
+    public byte[] RowVersion { get; private set; } = null!;
 
     public ChairsInEvent(Guid idRoomEvent)
     {
@@ -32,4 +33,10 @@ public class ChairsInEvent : EntityBase
         Status = ChairStatus.Occupied;
     }
 
+    public void VacateChair()
+    {
+        if (Status == ChairStatus.Vacant)
+            throw new InvalidOperationException("A cadeira já está vaga.");
+        Status = ChairStatus.Vacant;
+    }
 }

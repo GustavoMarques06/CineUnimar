@@ -1,3 +1,4 @@
+using Api_Venda_Ingressos.BoundedContext.Event.Domain.Interfaces;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Enums;
 using Api_Venda_Ingressos.BoundedContext.Sell.Domain.Interfaces;
 
@@ -6,10 +7,14 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
     public class ProcessPaymentUseCase
     {
         private readonly ITicketRepository _ticketRepository;
+        private readonly IChairsInEventRepository _chairsInEventRepository;
 
-        public ProcessPaymentUseCase(ITicketRepository ticketRepository)
+        public ProcessPaymentUseCase(
+            ITicketRepository ticketRepository,
+            IChairsInEventRepository chairsInEventRepository)
         {
             _ticketRepository = ticketRepository;
+            _chairsInEventRepository = chairsInEventRepository;
         }
 
         public async Task ApproveAsync(Guid ticketId)
@@ -41,8 +46,14 @@ namespace Api_Venda_Ingressos.BoundedContext.Sell.Application.UseCases
                 throw new Exception($"Não é possível rejeitar um pagamento com status '{ticket.Status}'.");
 
             ticket.RejectPayment();
-
             await _ticketRepository.UpdateAsync(ticket);
+
+            var chair = await _chairsInEventRepository.GetByIdAsync(ticket.ChairInEventId);
+            if (chair is not null && chair.Status == Api_Venda_Ingressos.BoundedContext.Event.Domain.Enums.ChairStatus.Occupied)
+            {
+                chair.VacateChair();
+                await _chairsInEventRepository.UpdateAsync(chair);
+            }
         }
     }
 }
